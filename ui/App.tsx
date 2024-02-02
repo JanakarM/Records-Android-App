@@ -25,7 +25,7 @@ const MyStack = () => {
 
   useEffect(() => {
     GoogleSignin.configure({
-      webClientId: '579486122496-3hkmfp8a4icvtvd8q7dhlh5havfhaqkk.apps.googleusercontent.com',
+      webClientId: '579486122496-iu2als4634td3ebr9mrsh89q0m221gbd.apps.googleusercontent.com',
     });
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount

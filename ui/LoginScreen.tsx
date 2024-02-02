@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, Button, SafeAreaView, FlatList, View, TouchableHighlight } from 'react-native';
+import { Text, Button, SafeAreaView, FlatList, View, TouchableHighlight, Alert } from 'react-native';
 import Styles from './StyleSheet';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -11,11 +11,11 @@ async function onGoogleButtonPress() {
   await GoogleSignin.signIn().then(({idToken})=>{
     // Create a Google credential with the token
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
+    Alert.alert('Id Token -> ' + idToken)
     // Sign-in the user with the credential
     return auth().signInWithCredential(googleCredential);
   }).catch((error)=>{
-    console.log('Google Siginin Error -> ' + error)
+    Alert.alert('Google Siginin Error -> ' + error)
   });
 }
 function GoogleSignInButton() {
@@ -24,9 +24,9 @@ function GoogleSignInButton() {
       style={Styles.signInButton}
       activeOpacity={0.6}
       underlayColor='lightgrey'
-      onPress={() => onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}
+      onPress={() => onGoogleButtonPress().then(() => Alert.alert('Signed in with Google!'))}
       >
-        <Text>Google Sign-In</Text>
+        <Text style={Styles.signInText}>Google Sign-In</Text>
       </TouchableHighlight>
     );
   }

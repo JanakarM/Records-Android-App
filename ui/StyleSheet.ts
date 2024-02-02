@@ -21,5 +21,8 @@ import {StyleSheet, Text, View} from 'react-native';
         backgroundColor: 'white',
         padding: 15,
         borderRadius: 15
+    },
+    signInText: {
+      color: 'black'
     }
   });
