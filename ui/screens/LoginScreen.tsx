@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Text, Button, SafeAreaView, FlatList, View, TouchableHighlight, Alert } from 'react-native';
-import Styles from './StyleSheet';
+import Styles from '../StyleSheet';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 

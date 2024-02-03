@@ -1,4 +1,4 @@
-package com.awesomeproject
+package rn.android.firebase
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity

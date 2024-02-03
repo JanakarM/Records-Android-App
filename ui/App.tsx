@@ -2,13 +2,11 @@ import React, {useEffect, useState} from 'react';
 import { Text, Button, SafeAreaView, FlatList } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import HomeScreen from './HomeScreen';
-import ManageCanScreen from './ManageWaterCanScreen';
+import HomeScreen from './screens/HomeScreen';
+import ManageCanScreen from './screens/ManageWaterCanScreen';
 import Styles from './StyleSheet';
-import LoginScreen from './LoginScreen';
+import LoginScreen from './screens/LoginScreen';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import GoogleServicesJson from '../android/app/google-services.json';
-import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 
 const Stack = createNativeStackNavigator();
