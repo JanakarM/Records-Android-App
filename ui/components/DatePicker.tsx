@@ -9,6 +9,9 @@ export default function App({date, updateSelectedDate}) {
     <DateTimePicker
         mode="single"
         date={date}
+        yearContainerStyle={Styles.datePickerContainer}
+        monthContainerStyle={Styles.datePickerContainer}
+        headerButtonColor='white'
         onChange={({date}) => {
                 updateSelectedDate(date);
             }

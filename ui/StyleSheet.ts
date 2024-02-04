@@ -5,7 +5,7 @@ import {StyleSheet, Text, View} from 'react-native';
     container: {
       flex: 1,
       gap: 50,
-      backgroundColor: 'silver',
+      backgroundColor: 'black',
       alignItems: 'center',
       justifyContent: 'center'
     },
@@ -13,7 +13,13 @@ import {StyleSheet, Text, View} from 'react-native';
       marginTop: 15
     },
     cansSummaryView: {
-      marginTop: 25
+      padding: 15,
+      backgroundColor: 'darkred'
+    },
+    cansEntryView: {
+      marginTop: 25,
+      padding: 15,
+      backgroundColor: 'darkblue'
     },
     cansListItem: {
       flex: 1,
@@ -23,7 +29,6 @@ import {StyleSheet, Text, View} from 'react-native';
       borderBottomColor: 'white',
       borderBottomWidth: 0.5,
       marginTop: 10,
-      backgroundColor: 'lightgrey'
     },
     canSummaryItem: {
       padding: 10,
@@ -35,33 +40,59 @@ import {StyleSheet, Text, View} from 'react-native';
     manageCanContainer: {
       flex: 1,
       gap: 10,
-      backgroundColor: 'silver',
+      backgroundColor: 'black',
       padding: 15
     },
+    loginContainer: {
+      paddingVertical: 75,
+      flex: 1,
+      gap: 10,
+      backgroundColor: 'silver',
+      alignItems: 'center',
+      paddingHorizontal: 5
+    },
+    appName: {
+      fontSize: 30,
+      fontWeight: 'bold',
+      color: 'black'
+    },
+    appDescription: {
+      color: 'black'
+    },
+    signInImage: {
+      marginVertical: 30,
+      width: 350,
+      height: 350,
+      borderRadius: 50
+    },
     manageCanButton: {
-        padding: 10,
-        borderRadius: 10,
-        backgroundColor: 'grey'
+        width: '60%',
+        padding: 15,
+        borderRadius: 15,
+        backgroundColor: 'pink',
+        alignItems: 'center'
     },
     addCanButton: {
       padding: 10,
       borderRadius: 10,
       alignItems: 'center',
-      backgroundColor: 'green'
+      backgroundColor: 'darkgreen'
     },
     addCanButtonText: {
       color: 'white'
     },
     manageCanText: {
-        color: 'white'
+        color: 'black'
     },
     signInButton: {
-        backgroundColor: 'white',
+        backgroundColor: 'black',
         padding: 15,
-        borderRadius: 15
+        borderRadius: 15,
+        alignItems: 'center',
+        width: '100%'
     },
     signInText: {
-      color: 'black'
+      color: 'white'
     },
     datePicker: {
       backgroundColor: '#F5FCFF'
@@ -72,5 +103,8 @@ import {StyleSheet, Text, View} from 'react-native';
       backgroundColor: 'white',
       borderRadius: 10,
       color: 'black'
+    },
+    datePickerContainer: {
+      backgroundColor: 'black'
     }
   });

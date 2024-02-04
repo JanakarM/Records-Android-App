@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, Button, SafeAreaView, FlatList, View, TouchableHighlight, Alert } from 'react-native';
+import { Text, Button, SafeAreaView, FlatList, View, TouchableHighlight, Alert, Image } from 'react-native';
 import Styles from '../StyleSheet';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -20,20 +20,34 @@ async function onGoogleButtonPress() {
 }
 function GoogleSignInButton() {
     return (
-      <TouchableHighlight
-      style={Styles.signInButton}
-      activeOpacity={0.6}
-      underlayColor='lightgrey'
-      onPress={() => onGoogleButtonPress().then(() => Alert.alert('Signed in with Google!'))}
+      <View
+      style={Styles.loginContainer}
       >
-        <Text style={Styles.signInText}>Google Sign-In</Text>
-      </TouchableHighlight>
+        <Text
+        style={Styles.appName}>
+          Daily
+        </Text>
+        <Text
+        style={Styles.appDescription}>
+          Manages daily routine
+        </Text>
+        <Image
+        style={Styles.signInImage}
+        source={require('../images/signIn.png')}
+        />
+        <TouchableHighlight
+        style={Styles.signInButton}
+        activeOpacity={0.6}
+        underlayColor='lightgrey'
+        onPress={() => onGoogleButtonPress().then(() => Alert.alert('Signed in with Google!'))}
+        >
+          <Text style={Styles.signInText}>Google Sign-In</Text>
+        </TouchableHighlight>
+      </View>
     );
   }
 export default function(){
     return (
-        <View style={Styles.container}>
-            <GoogleSignInButton />
-        </View>
+      <GoogleSignInButton />
     )
 }

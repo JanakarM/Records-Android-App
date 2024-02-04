@@ -139,13 +139,6 @@ export default function(){
       }, []);
     const flatLists = [
         (
-              <FlatList
-              data={waterCanEntries}
-              keyExtractor={item=>item.id}
-              renderItem={({ item }) => <ListItem {...item} deleteItem={deleteCan}/>}
-              />
-        ),
-        (
               <View
               style={Styles.cansSummaryView}>
                 <Text>Summary</Text>
@@ -154,6 +147,17 @@ export default function(){
                 renderItem={({ item }) => <SummayListItem {...item} deleteItem={deleteCansForTheMonth}/>}
                 />
               </View>
+        ),
+        (
+          <View
+          style={Styles.cansEntryView}>
+            <Text>Watercan Entries</Text>
+            <FlatList
+            data={waterCanEntries}
+            keyExtractor={item=>item.id}
+            renderItem={({ item }) => <ListItem {...item} deleteItem={deleteCan}/>}
+            />
+          </View>
         )
       
     ]
@@ -165,7 +169,9 @@ export default function(){
             onChangeText={c=>setCount(c)}
             keyboardType='number-pad'
             style={Styles.numberOfCansInput}
-            placeholder='Number of cans'/>
+            placeholder='Enter number of cans here.'
+            placeholderTextColor='black'
+            />
             <TouchableHighlight
             style={Styles.addCanButton}
             onPress={addCanEntry}>
