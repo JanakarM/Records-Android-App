@@ -5,7 +5,7 @@ import {StyleSheet, Text, View} from 'react-native';
     container: {
       flex: 1,
       gap: 50,
-      backgroundColor: 'black',
+      // backgroundColor: 'black',
       alignItems: 'center',
       justifyContent: 'center'
     },
@@ -14,50 +14,50 @@ import {StyleSheet, Text, View} from 'react-native';
     },
     cansSummaryView: {
       padding: 15,
-      backgroundColor: 'darkred'
+      // backgroundColor: 'darkred'
     },
     cansEntryView: {
       marginTop: 25,
       padding: 15,
-      backgroundColor: 'darkblue'
+      // backgroundColor: 'darkblue'
     },
     cansListItem: {
       flex: 1,
       flexDirection: 'row',
       justifyContent: 'space-between',
       padding: 10,
-      borderBottomColor: 'white',
+      // borderBottomColor: 'white',
       borderBottomWidth: 0.5,
       marginTop: 10,
     },
     canSummaryItem: {
       padding: 10,
-      borderBottomColor: 'white',
+      // borderBottomColor: 'white',
       borderBottomWidth: 0.5,
       marginTop: 10,
-      backgroundColor: 'lightgrey'
+      // backgroundColor: 'lightgrey'
     },
     manageCanContainer: {
       flex: 1,
       gap: 10,
-      backgroundColor: 'black',
+      // backgroundColor: 'black',
       padding: 15
     },
     loginContainer: {
       paddingVertical: 75,
       flex: 1,
       gap: 10,
-      backgroundColor: 'silver',
+      // backgroundColor: 'silver',
       alignItems: 'center',
       paddingHorizontal: 5
     },
     appName: {
       fontSize: 30,
       fontWeight: 'bold',
-      color: 'black'
+      // color: 'black'
     },
     appDescription: {
-      color: 'black'
+      // color: 'black'
     },
     signInImage: {
       marginVertical: 30,
@@ -66,45 +66,40 @@ import {StyleSheet, Text, View} from 'react-native';
       borderRadius: 50
     },
     manageCanButton: {
-        width: '60%',
-        padding: 15,
-        borderRadius: 15,
-        backgroundColor: 'pink',
+        padding: 10,
+        borderRadius: 10,
+        borderWidth: 0.5,
+        // backgroundColor: 'darkgrey',
         alignItems: 'center'
     },
-    addCanButton: {
-      padding: 10,
-      borderRadius: 10,
-      alignItems: 'center',
-      backgroundColor: 'darkgreen'
-    },
     addCanButtonText: {
-      color: 'white'
+      // color: 'white'
     },
     manageCanText: {
-        color: 'black'
+        // color: 'black'
     },
     signInButton: {
-        backgroundColor: 'black',
+        // backgroundColor: 'black',
         padding: 15,
         borderRadius: 15,
         alignItems: 'center',
         width: '100%'
     },
     signInText: {
-      color: 'white'
+      // color: 'white'
     },
     datePicker: {
-      backgroundColor: '#F5FCFF'
+      // backgroundColor: '#F5FCFF'
     },
     numberOfCansInput: {
       paddingHorizontal: 10,
       paddingVertical: 5,
-      backgroundColor: 'white',
+      // backgroundColor: 'white',
       borderRadius: 10,
-      color: 'black'
+      borderBottomWidth: 0.75
+      // color: 'black'
     },
     datePickerContainer: {
-      backgroundColor: 'black'
+      // backgroundColor: 'black'
     }
   });

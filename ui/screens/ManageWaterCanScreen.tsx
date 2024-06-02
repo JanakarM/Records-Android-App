@@ -35,6 +35,7 @@ export default function(){
     const [date, setDate] = useState(dayjs());
     const [count, setCount] = useState('');
     const [canSummary, setCanSummary] = useState([]);
+    const [canAdd, setcanAdd] = useState(false); // Toggles add can container
 
     const onSnapshot = async(docs) => {
         const waterCanEntries = [], monVsCount={}, canSummary=[], monVsStartTime={}, monVsEndTIme={};
@@ -63,18 +64,23 @@ export default function(){
           setLoading(false);
     }
     const addCanEntry = () => {
-        if(count == ''){
-          Alert.alert('Error', 'Please provide number of cans to create entry.');
-          return;  
-        }
-        firestore()
-          .collection('WaterCanEntries')
-          .add({
-            time: date.$d.getTime().toString(),
-            count: count,
-          })
-          .then((a) => {
-            console.log('User added!');
+      if(!canAdd){
+        setcanAdd(true);
+        return;
+      }
+      if(count == ''){
+        Alert.alert('Error', 'Please provide number of cans to create entry.');
+        return;  
+      }
+      firestore()
+        .collection('WaterCanEntries')
+        .add({
+          time: date.$d.getTime().toString(),
+          count: count,
+        })
+        .then((a) => {
+          console.log('A can added!');
+          setcanAdd(false);
           });
     }
     const deleteCan = (id) => {
@@ -163,17 +169,24 @@ export default function(){
     ]
     return (
         <SafeAreaView style={Styles.manageCanContainer}>
-            <DatePicker date={date} updateSelectedDate={setDate}></DatePicker>
-            <TextInput
-            value={count}
-            onChangeText={c=>setCount(c)}
-            keyboardType='number-pad'
-            style={Styles.numberOfCansInput}
-            placeholder='Enter number of cans here.'
-            placeholderTextColor='black'
-            />
+            {
+              canAdd ? (
+                <>
+                  <DatePicker date={date} updateSelectedDate={setDate}></DatePicker>
+                  <TextInput
+                  value={count}
+                  onChangeText={c=>setCount(c)}
+                  keyboardType='number-pad'
+                  style={Styles.numberOfCansInput}
+                  placeholder='Enter number of cans here.'
+                  // placeholderTextColor='black'
+                  />
+                </>
+              ) : ''
+            }
             <TouchableHighlight
-            style={Styles.addCanButton}
+            style={Styles.manageCanButton}
+            underlayColor="#DDDDDD"
             onPress={addCanEntry}>
                 <Text style={Styles.addCanButtonText}>Add Cans</Text>
             </TouchableHighlight>

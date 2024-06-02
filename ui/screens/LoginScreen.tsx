@@ -11,7 +11,7 @@ async function onGoogleButtonPress() {
   await GoogleSignin.signIn().then(({idToken})=>{
     // Create a Google credential with the token
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    Alert.alert('Id Token -> ' + idToken)
+    console.log('Id Token -> ' + idToken)
     // Sign-in the user with the credential
     return auth().signInWithCredential(googleCredential);
   }).catch((error)=>{
@@ -38,8 +38,8 @@ function GoogleSignInButton() {
         <TouchableHighlight
         style={Styles.signInButton}
         activeOpacity={0.6}
-        underlayColor='lightgrey'
-        onPress={() => onGoogleButtonPress().then(() => Alert.alert('Signed in with Google!'))}
+        // underlayColor='lightgrey'
+        onPress={() => onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}
         >
           <Text style={Styles.signInText}>Google Sign-In</Text>
         </TouchableHighlight>
