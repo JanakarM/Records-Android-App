@@ -137,7 +137,7 @@ export default function(){
     useEffect(() => {
         const subscriber = firestore()
           .collection('WaterCanEntries')
-          .orderBy('time')
+          .orderBy('time', 'desc')
           .onSnapshot(onSnapshot);
     
         // Unsubscribe from events when no longer in use

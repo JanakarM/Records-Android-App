@@ -5,85 +5,56 @@ import firestore from '@react-native-firebase/firestore';
 import DatePicker from '../components/DatePicker';
 import dayjs from 'dayjs';
 
-const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-
-const ListItem = ({id, time, count, deleteItem}) => {
+const ListItem = ({id, time, memory, deleteItem}) => {
     return (
         <Pressable
         onLongPress={() => deleteItem(id)}
-        style={Styles.cansListItem}>
+        style={Styles.memoryListItem}>
             <Text>{new Date(parseFloat(time)).toDateString()}</Text>
-            <Text>{count}</Text>
+            <Text>{memory}</Text>
         </Pressable>
     )
 }
 
-const SummayListItem = ({month, count, startTime, endTime, deleteItem}) => {
-  return (
-      <Pressable
-      onLongPress={() => deleteItem(startTime, endTime, month)}
-      style={Styles.cansListItem}>
-          <Text>{month}</Text>
-          <Text>{count}</Text>
-      </Pressable>
-  )
-}
-
 export default function(){
     const [loading, setLoading] = useState(true); // Set loading to true on component mount
-    const [waterCanEntries, setwaterCanEntries] = useState([]); // Initial empty array of waterCanEntries
+    const [memories, setMemories] = useState([]); // Initial empty array of waterCanEntries
     const [date, setDate] = useState(dayjs());
-    const [count, setCount] = useState('');
-    const [canSummary, setCanSummary] = useState([]);
-    const [canAdd, setcanAdd] = useState(false); // Toggles add can container
+    const [memory, setMemory] = useState('');
+    const [canAdd, setCanAdd] = useState(false); // Toggles add can container
 
     const onSnapshot = async(docs) => {
-        const waterCanEntries = [], monVsCount={}, canSummary=[], monVsStartTime={}, monVsEndTIme={};
+        const memories = [];
           docs.forEach(doc => {
-            const mon=MONTHS[new Date(parseFloat(doc.data().time)).getMonth()];
-            monVsCount[mon]=monVsCount[mon]!=undefined?monVsCount[mon]+parseInt(doc.data().count):parseInt(doc.data().count);
-            if(monVsStartTime[mon]===undefined){
-              monVsStartTime[mon]=doc.data().time;
-            }
-            monVsEndTIme[mon]=doc.data().time;
-            waterCanEntries.push({
+            memories.push({
               ...doc.data(),
               id: doc.id,
             });
           });
-          for (const month in monVsCount) {
-            canSummary.push({
-              month: month,
-              count: monVsCount[month],
-              startTime: monVsStartTime[month],
-              endTime: monVsEndTIme[month]
-            });
-          }
-          setCanSummary(canSummary);
-          setwaterCanEntries(waterCanEntries);
+          setMemories(memories);
           setLoading(false);
     }
     const addCanEntry = () => {
       if(!canAdd){
-        setcanAdd(true);
+        setCanAdd(true);
         return;
       }
-      if(count == ''){
-        Alert.alert('Error', 'Please provide number of cans to create entry.');
+      if(memory == ''){
+        Alert.alert('Error', 'Please provide a memory to create entry.');
         return;  
       }
       firestore()
-        .collection('WaterCanEntries')
+        .collection('Memories')
         .add({
           time: date.$d.getTime().toString(),
-          count: count,
+          memory: memory,
         })
         .then((a) => {
-          console.log('A can added!');
-          setcanAdd(false);
+          console.log('A memory added!');
+          setCanAdd(false);
           });
     }
-    const deleteCan = (id) => {
+    const deleteMemory = (id) => {
       Alert.alert('Delete Item', 'Do you want delete this item?', [
         {
           text: 'Delete',
@@ -107,14 +78,14 @@ export default function(){
       ]);
     }
     useEffect(() => {
-        const subscriber = firestore()
-          .collection('WaterCanEntries')
-          .orderBy('time')
-          .onSnapshot(onSnapshot);
-    
-        // Unsubscribe from events when no longer in use
-        return () => subscriber();
-      }, []);
+      const subscriber = firestore()
+        .collection('Memories')
+        .orderBy('time', 'desc')
+        .onSnapshot(onSnapshot);
+  
+      // Unsubscribe from events when no longer in use
+      return () => subscriber();
+    }, []);
     return (
         <SafeAreaView style={Styles.manageCanContainer}>
             {
@@ -122,8 +93,8 @@ export default function(){
                 <>
                   <DatePicker date={date} updateSelectedDate={setDate}></DatePicker>
                   <TextInput
-                  value={count}
-                  onChangeText={c=>setCount(c)}
+                  value={memory}
+                  onChangeText={c=>setMemory(c)}
                   style={Styles.numberOfCansInput}
                   placeholder='Enter the memory to recall later.'
                   // placeholderTextColor='black'
@@ -138,9 +109,9 @@ export default function(){
                 <Text style={Styles.addCanButtonText}>Add Memory</Text>
             </TouchableHighlight>
             <FlatList
-            data={waterCanEntries}
+            data={memories}
             keyExtractor={item=>item.id}
-            renderItem={({ item }) => <ListItem {...item} deleteItem={deleteCan}/>}
+            renderItem={({ item }) => <ListItem {...item} deleteItem={deleteMemory}/>}
             />
         </SafeAreaView>
     )
