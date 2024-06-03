@@ -108,11 +108,15 @@ export default function(){
             onPress={addCanEntry}>
                 <Text style={Styles.addCanButtonText}>Add Memory</Text>
             </TouchableHighlight>
-            <FlatList
-            data={memories}
-            keyExtractor={item=>item.id}
-            renderItem={({ item }) => <ListItem {...item} deleteItem={deleteMemory}/>}
-            />
+            <View
+            style={Styles.memoriesView}>
+              <Text>Memories</Text>
+              <FlatList
+              data={memories}
+              keyExtractor={item=>item.id}
+              renderItem={({ item }) => <ListItem {...item} deleteItem={deleteMemory}/>}
+              />
+            </View>
         </SafeAreaView>
     )
 }

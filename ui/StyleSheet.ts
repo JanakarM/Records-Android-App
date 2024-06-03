@@ -28,14 +28,18 @@ import {StyleSheet, Text, View} from 'react-native';
       padding: 10,
       // borderBottomColor: 'white',
       borderBottomWidth: 0.5,
-      marginTop: 10,
+      marginTop: 10
+    },
+    memoriesView: {
+      marginTop: 15,
+      padding: 10
     },
     memoryListItem: {
       flexDirection: 'column',
       padding: 10,
       // borderBottomColor: 'white',
       borderBottomWidth: 0.5,
-      marginTop: 10,
+      marginTop: 10
     },
     canSummaryItem: {
       padding: 10,
