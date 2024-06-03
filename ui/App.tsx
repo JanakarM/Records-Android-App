@@ -8,6 +8,7 @@ import Styles from './StyleSheet';
 import LoginScreen from './screens/LoginScreen';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
+import RecallScreen from './screens/RecallScreen';
 
 const Stack = createNativeStackNavigator();
   
@@ -45,6 +46,7 @@ const MyStack = () => {
         options={{title: 'Home'}}
       />
       <Stack.Screen name="ManageCan" component={ManageCanScreen} options={{title: 'Manage Water Can'}}/>
+      <Stack.Screen name="Recall" component={RecallScreen} options={{title: 'Recall'}}/>
     </Stack.Navigator>
   </NavigationContainer>
   )

@@ -38,7 +38,7 @@ function GoogleSignInButton() {
         <TouchableHighlight
         style={Styles.signInButton}
         activeOpacity={0.6}
-        // underlayColor='lightgrey'
+        underlayColor="#DDDDDD"
         onPress={() => onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}
         >
           <Text style={Styles.signInText}>Google Sign-In</Text>
