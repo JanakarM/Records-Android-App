@@ -36,6 +36,7 @@ import {StyleSheet, Text, View} from 'react-native';
     },
     memoryListItem: {
       flexDirection: 'column',
+      gap: 5,
       padding: 10,
       // borderBottomColor: 'white',
       borderBottomWidth: 0.5,
@@ -112,5 +113,15 @@ import {StyleSheet, Text, View} from 'react-native';
     },
     datePickerContainer: {
       // backgroundColor: 'black'
+    },
+    emptyState: {
+      flex: 1,
+      height: 100,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    listHeading: {
+      fontSize: 16,
+      fontWeight: 'bold'
     }
   });

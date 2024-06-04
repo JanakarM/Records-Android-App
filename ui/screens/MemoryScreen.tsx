@@ -3,6 +3,7 @@ import { Text, Button, SafeAreaView, FlatList, View, Pressable, Alert, Touchable
 import Styles from '../StyleSheet';
 import firestore from '@react-native-firebase/firestore';
 import DatePicker from '../components/DatePicker';
+import EmptyState from '../components/EmptyState';
 import dayjs from 'dayjs';
 
 const ListItem = ({id, time, memory, deleteItem}) => {
@@ -34,7 +35,7 @@ export default function(){
           setMemories(memories);
           setLoading(false);
     }
-    const addCanEntry = () => {
+    const addMemory = () => {
       if(!canAdd){
         setCanAdd(true);
         return;
@@ -105,15 +106,16 @@ export default function(){
             <TouchableHighlight
             style={Styles.manageCanButton}
             underlayColor="#DDDDDD"
-            onPress={addCanEntry}>
+            onPress={addMemory}>
                 <Text style={Styles.addCanButtonText}>Add Memory</Text>
             </TouchableHighlight>
             <View
             style={Styles.memoriesView}>
-              <Text>Memories</Text>
+              <Text style={Styles.listHeading}>Memories</Text>
               <FlatList
               data={memories}
               keyExtractor={item=>item.id}
+              ListEmptyComponent={EmptyState}
               renderItem={({ item }) => <ListItem {...item} deleteItem={deleteMemory}/>}
               />
             </View>

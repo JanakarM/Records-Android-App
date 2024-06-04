@@ -11,7 +11,6 @@ export default function App({date, updateSelectedDate}) {
         date={date}
         yearContainerStyle={Styles.datePickerContainer}
         monthContainerStyle={Styles.datePickerContainer}
-        headerButtonColor='white'
         onChange={({date}) => {
                 updateSelectedDate(date);
             }

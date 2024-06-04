@@ -3,6 +3,7 @@ import { Text, Button, SafeAreaView, FlatList, View, Pressable, Alert, Touchable
 import Styles from '../StyleSheet';
 import firestore from '@react-native-firebase/firestore';
 import DatePicker from '../components/DatePicker';
+import EmptyState from '../components/EmptyState';
 import dayjs from 'dayjs';
 
 const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -147,9 +148,10 @@ export default function(){
         (
               <View
               style={Styles.cansSummaryView}>
-                <Text>Summary</Text>
+                <Text style={Styles.listHeading}>Summary</Text>
                 <FlatList
                 data={canSummary}
+                ListEmptyComponent={EmptyState}
                 renderItem={({ item }) => <SummayListItem {...item} deleteItem={deleteCansForTheMonth}/>}
                 />
               </View>
@@ -157,10 +159,11 @@ export default function(){
         (
           <View
           style={Styles.cansEntryView}>
-            <Text>Watercan Entries</Text>
+            <Text style={Styles.listHeading}>Watercan Entries</Text>
             <FlatList
             data={waterCanEntries}
             keyExtractor={item=>item.id}
+            ListEmptyComponent={EmptyState}
             renderItem={({ item }) => <ListItem {...item} deleteItem={deleteCan}/>}
             />
           </View>

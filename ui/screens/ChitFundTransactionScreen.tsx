@@ -8,38 +8,36 @@ import dayjs from 'dayjs';
 
 var nav;
 
-const ListItem = ({id, time, name, deleteItem}) => {
-  let date = new Date(parseFloat(time));
-  date = (date.getMonth()+1) + '/' + date.getFullYear();
-  const chitFund = {id, name, date};
+const ListItem = ({id, time, amount, deleteItem}) => {
+  const date = new Date(parseFloat(time)).toDateString();  
   return (
       <Pressable
-      onPress={()=>nav.navigate('ChitFundTransaction', {chitFund})}
+      onPress={()=>nav.navigate('Recall')}
       onLongPress={() => deleteItem(id)}
       style={Styles.memoryListItem}>
           <Text>{date}</Text>
-          <Text>{name}</Text>
+          <Text>{amount}</Text>
       </Pressable>
   )
 }
 
-export default function({navigation}){
-    nav = navigation;
+export default function({route}){
+    const chitFund = route.params.chitFund;
     const [loading, setLoading] = useState(true); // Set loading to true on component mount
-    const [chitFunds, setChitFunds] = useState([]); // Initial empty array of chitFunds
+    const [transactions, setTransactions] = useState([]); // Initial empty array of chitFunds
     const [date, setDate] = useState(dayjs());// check new Date()
-    const [name, setName] = useState('');
+    const [amount, setAmount] = useState('');
     const [canAdd, setCanAdd] = useState(false); // Toggles add container
 
     const onSnapshot = async(docs) => {
-        const chitFunds = [];
+        const transactions = [];
           docs.forEach(doc => {
-            chitFunds.push({
+            transactions.push({
               ...doc.data(),
               id: doc.id,
             });
           });
-          setChitFunds(chitFunds);
+          setTransactions(transactions);
           setLoading(false);
     }
     const addItem = () => {
@@ -47,18 +45,19 @@ export default function({navigation}){
         setCanAdd(true);
         return;
       }
-      if(name == ''){
-        Alert.alert('Error', 'Please provide a chit fund name to create entry.');
+      if(amount == ''){
+        Alert.alert('Error', 'Please provide a transaction amount to create entry.');
         return;  
       }
       firestore()
-        .collection('ChitFunds')
+        .collection('ChitFundTransactions')
         .add({
           time: date.$d.getTime().toString(),
-          name: name,
+          amount: amount,
+          chitFundId: chitFund.id
         })
         .then((a) => {
-          console.log('A memory added!');
+          console.log('A transaction added!');
           setCanAdd(false);
           });
     }
@@ -68,7 +67,7 @@ export default function({navigation}){
           text: 'Delete',
           onPress: () => {
             firestore()
-            .collection('ChitFunds')
+            .collection('ChitFundTransactions')
             .doc(id)
             .delete()
             .then(() => {
@@ -87,9 +86,10 @@ export default function({navigation}){
     }
     useEffect(() => {
       const subscriber = firestore()
-        .collection('ChitFunds')
+        .collection('ChitFundTransactions')
+        .where('chitFundId', '==', chitFund.id)
         .orderBy('time', 'desc')
-        .onSnapshot(onSnapshot);
+        .onSnapshot(a => onSnapshot(a), err => console.log(err));
   
       // Unsubscribe from events when no longer in use
       return () => subscriber();
@@ -101,10 +101,10 @@ export default function({navigation}){
                 <>
                   <DatePicker date={date} updateSelectedDate={setDate}></DatePicker>
                   <TextInput
-                  value={name}
-                  onChangeText={c=>setName(c)}
+                  value={amount}
+                  onChangeText={c=>setAmount(c)}
                   style={Styles.numberOfCansInput}
-                  placeholder='Enter the name of chit fund.'
+                  placeholder='Enter the transaction amount.'
                   // placeholderTextColor='black'
                   />
                 </>
@@ -114,13 +114,13 @@ export default function({navigation}){
             style={Styles.manageCanButton}
             underlayColor="#DDDDDD"
             onPress={addItem}>
-                <Text style={Styles.addCanButtonText}>Add Chit Fund</Text>
+                <Text style={Styles.addCanButtonText}>Add Transaction</Text>
             </TouchableHighlight>
             <View
             style={Styles.memoriesView}>
-              <Text style={Styles.listHeading}>Chit Funds</Text>
+              <Text style={Styles.listHeading}>Transactions of  '{chitFund.date} - {chitFund.name}' chit fund</Text>
               <FlatList
-              data={chitFunds}
+              data={transactions}
               keyExtractor={item=>item.id}
               ListEmptyComponent={EmptyState}
               renderItem={({ item }) => <ListItem {...item} deleteItem={deleteItem}/>}

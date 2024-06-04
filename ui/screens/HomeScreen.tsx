@@ -14,7 +14,13 @@ export default function({navigation}){
             style={Styles.manageCanButton}
             underlayColor="#DDDDDD"
             onPress={()=>navigation.navigate('Recall')}>
-                <Text style={Styles.manageCanText}>Recall</Text>
+                <Text style={Styles.manageCanText}>Manage Memories</Text>
+            </TouchableHighlight>
+            <TouchableHighlight 
+            style={Styles.manageCanButton}
+            underlayColor="#DDDDDD"
+            onPress={()=>navigation.navigate('ChitFund')}>
+                <Text style={Styles.manageCanText}>Manage Chit Funds</Text>
             </TouchableHighlight>
         </SafeAreaView>
     )

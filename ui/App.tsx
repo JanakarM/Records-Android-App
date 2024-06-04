@@ -8,7 +8,9 @@ import Styles from './StyleSheet';
 import LoginScreen from './screens/LoginScreen';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
-import RecallScreen from './screens/RecallScreen';
+import RecallScreen from './screens/MemoryScreen';
+import ChitFundScreen from './screens/ChitFundScreen';
+import ChitFundTransactionScreen from './screens/ChitFundTransactionScreen';
 
 const Stack = createNativeStackNavigator();
   
@@ -45,8 +47,10 @@ const MyStack = () => {
         component={HomeScreen}
         options={{title: 'Home'}}
       />
-      <Stack.Screen name="ManageCan" component={ManageCanScreen} options={{title: 'Manage Water Can'}}/>
-      <Stack.Screen name="Recall" component={RecallScreen} options={{title: 'Recall'}}/>
+      <Stack.Screen name="ManageCan" component={ManageCanScreen} options={{title: 'Manage Water Cans'}}/>
+      <Stack.Screen name="Recall" component={RecallScreen} options={{title: 'Manage Memories'}}/>
+      <Stack.Screen name="ChitFund" component={ChitFundScreen} options={{title: 'Manage Chit Funds'}}/>
+      <Stack.Screen name="ChitFundTransaction" component={ChitFundTransactionScreen} options={{title: 'Manage Chit Fund Transactions'}}/>
     </Stack.Navigator>
   </NavigationContainer>
   )
