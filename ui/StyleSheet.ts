@@ -22,7 +22,6 @@ import {StyleSheet, Text, View} from 'react-native';
       // backgroundColor: 'darkblue'
     },
     cansListItem: {
-      flex: 1,
       flexDirection: 'row',
       justifyContent: 'space-between',
       padding: 10,
@@ -123,5 +122,10 @@ import {StyleSheet, Text, View} from 'react-native';
     listHeading: {
       fontSize: 16,
       fontWeight: 'bold'
+    },
+    editIcon: {
+      position: 'absolute',
+      right: 0,
+      top: 15
     }
   });

@@ -4,7 +4,6 @@ import Styles from '../StyleSheet';
 import firestore from '@react-native-firebase/firestore';
 import DatePicker from '../components/DatePicker';
 import EmptyState from '../components/EmptyState';
-import dayjs from 'dayjs';
 
 const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
@@ -33,7 +32,7 @@ const SummayListItem = ({month, count, startTime, endTime, deleteItem}) => {
 export default function(){
     const [loading, setLoading] = useState(true); // Set loading to true on component mount
     const [waterCanEntries, setwaterCanEntries] = useState([]); // Initial empty array of waterCanEntries
-    const [date, setDate] = useState(dayjs());
+    const [date, setDate] = useState(new Date().getTime());
     const [count, setCount] = useState('');
     const [canSummary, setCanSummary] = useState([]);
     const [canAdd, setcanAdd] = useState(false); // Toggles add can container

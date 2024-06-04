@@ -50,7 +50,7 @@ const MyStack = () => {
       <Stack.Screen name="ManageCan" component={ManageCanScreen} options={{title: 'Manage Water Cans'}}/>
       <Stack.Screen name="Recall" component={RecallScreen} options={{title: 'Manage Memories'}}/>
       <Stack.Screen name="ChitFund" component={ChitFundScreen} options={{title: 'Manage Chit Funds'}}/>
-      <Stack.Screen name="ChitFundTransaction" component={ChitFundTransactionScreen} options={{title: 'Manage Chit Fund Transactions'}}/>
+      <Stack.Screen name="ChitFundTransaction" component={ChitFundTransactionScreen} options={({route}) => ({title: route.params.chitFund.name})}/>
     </Stack.Navigator>
   </NavigationContainer>
   )

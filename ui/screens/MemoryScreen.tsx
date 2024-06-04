@@ -4,7 +4,6 @@ import Styles from '../StyleSheet';
 import firestore from '@react-native-firebase/firestore';
 import DatePicker from '../components/DatePicker';
 import EmptyState from '../components/EmptyState';
-import dayjs from 'dayjs';
 
 const ListItem = ({id, time, memory, deleteItem}) => {
     return (
@@ -20,7 +19,7 @@ const ListItem = ({id, time, memory, deleteItem}) => {
 export default function(){
     const [loading, setLoading] = useState(true); // Set loading to true on component mount
     const [memories, setMemories] = useState([]); // Initial empty array of memories
-    const [date, setDate] = useState(dayjs());
+    const [date, setDate] = useState(new Date().getTime());
     const [memory, setMemory] = useState('');
     const [canAdd, setCanAdd] = useState(false); // Toggles add container
 
