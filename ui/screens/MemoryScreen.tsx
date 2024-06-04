@@ -46,7 +46,7 @@ export default function(){
       firestore()
         .collection('Memories')
         .add({
-          time: date.$d.getTime().toString(),
+          time: date,
           memory: memory,
         })
         .then((a) => {
@@ -91,7 +91,7 @@ export default function(){
             {
               canAdd ? (
                 <>
-                  <DatePicker date={date} updateSelectedDate={setDate}></DatePicker>
+                  <DatePicker date={date} updateSelectedDate={(dt) => setDate(dt.$d.getTime())}></DatePicker>
                   <TextInput
                   value={memory}
                   onChangeText={c=>setMemory(c)}

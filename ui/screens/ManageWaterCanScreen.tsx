@@ -75,7 +75,7 @@ export default function(){
       firestore()
         .collection('WaterCanEntries')
         .add({
-          time: date.$d.getTime().toString(),
+          time: date,
           count: count,
         })
         .then((a) => {
@@ -174,7 +174,7 @@ export default function(){
             {
               canAdd ? (
                 <>
-                  <DatePicker date={date} updateSelectedDate={setDate}></DatePicker>
+                  <DatePicker date={date} updateSelectedDate={(dt) => setDate(dt.$d.getTime())}></DatePicker>
                   <TextInput
                   value={count}
                   onChangeText={c=>setCount(c)}
