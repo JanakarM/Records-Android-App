@@ -126,6 +126,6 @@ import {StyleSheet, Text, View} from 'react-native';
     editIcon: {
       position: 'absolute',
       right: 0,
-      top: 15
+      bottom: '15%'
     }
   });

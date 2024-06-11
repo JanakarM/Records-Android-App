@@ -18,6 +18,7 @@ async function onGoogleButtonPress() {
     Alert.alert('Google Siginin Error -> ' + error)
   });
 }
+
 function GoogleSignInButton() {
     return (
       <View
@@ -39,7 +40,7 @@ function GoogleSignInButton() {
         style={Styles.signInButton}
         activeOpacity={0.6}
         underlayColor="#DDDDDD"
-        onPress={() => onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}
+        onPress={() => onGoogleButtonPress().then((assertion) => {console.log('Signed in with Google!');})}
         >
           <Text style={Styles.signInText}>Google Sign-In</Text>
         </TouchableHighlight>

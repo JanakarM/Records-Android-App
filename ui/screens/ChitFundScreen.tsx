@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import { Text, Button, SafeAreaView, FlatList, View, Pressable, Alert, TouchableHighlight, TextInput, ScrollView } from 'react-native';
 import Styles from '../StyleSheet';
-import firestore from '@react-native-firebase/firestore';
 import DatePicker from '../components/DatePicker';
 import EmptyState from '../components/EmptyState';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {deleteData, getSnapShot, insertData, updateData} from '../utils/firestoreBroker';
 
 var nav;
+const collection = 'ChitFunds';
 
 const ListItem = ({id, time, name, deleteItem, editItem}) => {
   let date = new Date(parseFloat(time));
@@ -59,32 +60,19 @@ export default function({navigation}){
         Alert.alert('Error', 'Please provide a chit fund name to create entry.');
         return;  
       }
-      firestore()
-        .collection('ChitFunds')
-        .add({
-          time: date,
-          name: name,
-        })
-        .then((a) => {
-          console.log('A memory added!');
-          setCanModify(false);
-          });
+      insertData(collection, {
+        time: date,
+        name: name,
+      }, () => setCanModify(false));
     }
     const deleteItem = (id) => {
       Alert.alert('Delete Item', 'Do you want delete this item?', [
         {
           text: 'Delete',
           onPress: () => {
-            firestore()
-            .collection('ChitFunds')
-            .doc(id)
-            .delete()
-            .then(() => {
+            deleteData(collection, id, () => {
               setCanModify(false);
               setIsEdit(false); // edit and delete case
-              console.log('The memory deleted!' + id);
-            }).catch((err) => {
-              console.log(err);
             });
           },
         },
@@ -100,20 +88,12 @@ export default function({navigation}){
         {
           text: 'Update',
           onPress: () => {
-            firestore()
-            .collection('ChitFunds')
-            .doc(modifyingTransactionId)
-            .update({
-                time: date,
-                name: name
-              }
-            )
-            .then(() => {
+            updateData(collection, modifyingTransactionId, {
+              time: date,
+              name: name
+            }, () => {
               setCanModify(false);
               setIsEdit(false);
-              console.log('The transaction is updated!' + id + ' ' + data);
-            }).catch((err) => {
-              console.log(err);
             });
           },
         },
@@ -132,10 +112,7 @@ export default function({navigation}){
       setModifyingTransactionId(id);
     }
     useEffect(() => {
-      const subscriber = firestore()
-        .collection('ChitFunds')
-        .orderBy('time', 'desc')
-        .onSnapshot(onSnapshot);
+      const subscriber = getSnapShot(collection, onSnapshot);
   
       // Unsubscribe from events when no longer in use
       return () => subscriber();

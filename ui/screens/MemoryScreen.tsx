@@ -1,17 +1,27 @@
 import React, {useEffect, useState} from 'react';
 import { Text, Button, SafeAreaView, FlatList, View, Pressable, Alert, TouchableHighlight, TextInput, ScrollView } from 'react-native';
 import Styles from '../StyleSheet';
-import firestore from '@react-native-firebase/firestore';
 import DatePicker from '../components/DatePicker';
 import EmptyState from '../components/EmptyState';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {deleteData, getSnapShot, insertData, updateData} from '../utils/firestoreBroker';
 
-const ListItem = ({id, time, memory, deleteItem}) => {
+const collection = 'Memories';
+
+const ListItem = ({id, time, memory, deleteItem, editItem}) => {
     return (
         <Pressable
         onLongPress={() => deleteItem(id)}
         style={Styles.memoryListItem}>
             <Text>{new Date(parseFloat(time)).toDateString()}</Text>
             <Text>{memory}</Text>
+            <Icon 
+            onPress={() => editItem(id, memory, parseFloat(time))}
+            name="edit"
+            size={25}
+            color="blue"
+            style={Styles.editIcon}
+            />
         </Pressable>
     )
 }
@@ -21,7 +31,9 @@ export default function(){
     const [memories, setMemories] = useState([]); // Initial empty array of memories
     const [date, setDate] = useState(new Date().getTime());
     const [memory, setMemory] = useState('');
-    const [canAdd, setCanAdd] = useState(false); // Toggles add container
+    const [canModify, setCanModify] = useState(false); // Toggles add can container
+    const [isEdit, setIsEdit] = useState(false);
+    const [modifyingTransactionId, setModifyingTransactionId] = useState('');
 
     const onSnapshot = async(docs) => {
         const memories = [];
@@ -35,38 +47,45 @@ export default function(){
           setLoading(false);
     }
     const addMemory = () => {
-      if(!canAdd){
-        setCanAdd(true);
+      if(!canModify){
+        setCanModify(true);
         return;
       }
       if(memory == ''){
         Alert.alert('Error', 'Please provide a memory to create entry.');
         return;  
       }
-      firestore()
-        .collection('Memories')
-        .add({
-          time: date,
-          memory: memory,
-        })
-        .then((a) => {
-          console.log('A memory added!');
-          setCanAdd(false);
-          });
+      insertData(collection, {
+        time: date,
+        memory: memory
+      }, () => setCanModify(false));
     }
     const deleteMemory = (id) => {
       Alert.alert('Delete Item', 'Do you want delete this item?', [
         {
           text: 'Delete',
           onPress: () => {
-            firestore()
-            .collection('Memories')
-            .doc(id)
-            .delete()
-            .then(() => {
-              console.log('The memory deleted!' + id);
-            }).catch((err) => {
-              console.log(err);
+            deleteData(collection, id);
+          },
+        },
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        }
+      ]);
+    }
+    const updateItem = () => {
+      Alert.alert('Update Item', 'Do you want update this item?', [
+        {
+          text: 'Update',
+          onPress: () => {
+            updateData(collection, modifyingTransactionId, {
+              time: date,
+              memory: memory
+            }, () => {
+              setCanModify(false);
+              setIsEdit(false);
             });
           },
         },
@@ -77,11 +96,15 @@ export default function(){
         }
       ]);
     }
+    const editItem = (id, memory, time) => {
+      setCanModify(true);
+      setIsEdit(true);
+      setMemory(memory);
+      setDate(time);
+      setModifyingTransactionId(id);
+    }
     useEffect(() => {
-      const subscriber = firestore()
-        .collection('Memories')
-        .orderBy('time', 'desc')
-        .onSnapshot(onSnapshot);
+      const subscriber = getSnapShot(collection, onSnapshot);
   
       // Unsubscribe from events when no longer in use
       return () => subscriber();
@@ -89,7 +112,7 @@ export default function(){
     return (
         <SafeAreaView style={Styles.manageCanContainer}>
             {
-              canAdd ? (
+              canModify ? (
                 <>
                   <DatePicker date={date} updateSelectedDate={(dt) => setDate(dt.$d.getTime())}></DatePicker>
                   <TextInput
@@ -102,12 +125,22 @@ export default function(){
                 </>
               ) : ''
             }
-            <TouchableHighlight
-            style={Styles.manageCanButton}
-            underlayColor="#DDDDDD"
-            onPress={addMemory}>
-                <Text style={Styles.addCanButtonText}>Add Memory</Text>
-            </TouchableHighlight>
+            {
+              isEdit ?
+              <TouchableHighlight
+              style={Styles.manageCanButton}
+              underlayColor="#DDDDDD"
+              onPress={updateItem}>
+                  <Text style={Styles.addCanButtonText}>Update Memory</Text>
+              </TouchableHighlight>
+              :
+              <TouchableHighlight
+              style={Styles.manageCanButton}
+              underlayColor="#DDDDDD"
+              onPress={addMemory}>
+                  <Text style={Styles.addCanButtonText}>Add Memory</Text>
+              </TouchableHighlight>
+            }
             <View
             style={Styles.memoriesView}>
               <Text style={Styles.listHeading}>Memories</Text>
@@ -115,7 +148,7 @@ export default function(){
               data={memories}
               keyExtractor={item=>item.id}
               ListEmptyComponent={EmptyState}
-              renderItem={({ item }) => <ListItem {...item} deleteItem={deleteMemory}/>}
+              renderItem={({ item }) => <ListItem {...item} deleteItem={deleteMemory} editItem={editItem}/>}
               />
             </View>
         </SafeAreaView>

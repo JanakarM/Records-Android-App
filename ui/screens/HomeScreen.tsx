@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Text, Button, SafeAreaView, FlatList, View, TouchableHighlight, Image } from 'react-native';
 import Styles from '../StyleSheet';
+
 export default function({navigation}){
     return (
         <SafeAreaView style={Styles.container}>
