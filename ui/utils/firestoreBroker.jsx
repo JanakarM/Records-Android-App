@@ -17,7 +17,6 @@ const insertData = (collection, data, callback) => {
 }
 
 const deleteData = (collection, id, callback) => {
-    data.userId = userId();
     firestore()
     .collection(collection)
     .doc(id)
@@ -61,7 +60,6 @@ const getSnapShot = (collection, callback, conditions = []) => {
 }
 
 const updateData = (collection, id, data, callback) => {
-    data.userId = userId();
     firestore()
     .collection(collection)
     .doc(id)
