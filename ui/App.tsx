@@ -13,6 +13,8 @@ import ChitFundScreen from './screens/ChitFundScreen';
 import ChitFundTransactionScreen from './screens/ChitFundTransactionScreen';
 import { MenuProvider } from 'react-native-popup-menu';
 import ViewProfileScreen from './screens/ViewProfileScreen';
+import ShareScreen from './screens/ShareScreen';
+import SwitchOrgScreen from './screens/SwitchOrgScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -68,6 +70,8 @@ const MyStack = () => {
           {Screen('ChitFund', {title: 'Manage Chit Funds'}, ChitFundScreen)}
           {Screen('ChitFundTransaction', ({route}) => ({title: route.params.chitFund.name}), ChitFundTransactionScreen)}
           {Screen('ViewProfile', {title: 'View User Profile'}, ViewProfileScreen)}
+          {Screen('ShareData', {title: 'Share Data'}, ShareScreen)}
+          {Screen('SwitchOrg', {title: 'Switch Org'}, SwitchOrgScreen)}
         </Stack.Navigator>
       </NavigationContainer>
     </MenuProvider>
