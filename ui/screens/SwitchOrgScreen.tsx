@@ -11,16 +11,17 @@ export default function({navigation}){
   const [users, setUsers] = useState([]);
   const [shared, setShared] = useState([]); // Initial empty array of shared
   const [sharedOrg, setSharedOrg] = useState([]); // Initial empty array of shared
-    const [user, setUser] = useState('');
+  const [user, setUser] = useState('');
+  const [userId, setUserId] = useState('');
 
     const updateShared = () => {
       let sharedIds = shared.map(s => s.userId);
       let shareData = users.filter(user => sharedIds.includes(user.userId) || user.userId == getLoginId());
       setSharedOrg(shareData);
-      console.log(sharedIds);
-      console.log(users);
-      console.log(shareData);
     }
+    getUserId().then(userId => {
+      setUserId(userId);
+    });
     const onUserSnapshot = (docs) => {
         let users = [];
         docs.forEach(doc => {
@@ -54,23 +55,21 @@ export default function({navigation}){
 
     useEffect(() => {
         const subscriber = getSnapShotAll(shareCollection, onShareSnapshot, [['sharedWith', '==', getLoginEmail()]]);
-    
         // Unsubscribe from events when no longer in use
         return () => subscriber();
         }, []);
     
     useEffect(() => updateShared(), [users, shared]);
-
     return (
         <SafeAreaView style={Styles.manageCanContainer}>
             <View
             style={Styles.memoriesView}>
               <DropDown 
                 data={sharedOrg}
-                setValue={(a) => {console.log(a); setUser(a);}}
+                setValue={(a) => {setUser(a);}}
                 labelFd='email'
                 valueFd='userId'
-                value={getUserId()}
+                value={userId}
               />
             </View>
             <TouchableHighlight

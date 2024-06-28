@@ -1,20 +1,27 @@
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-
-var userId = null;
+import { setItem, getItem, clear, getAll } from 'react-native-shared-preferences';
 
 const getLoginId = () => auth().currentUser.uid;
 const getLoginEmail = () => auth().currentUser.email;
 
-const getUserId = () => userId;
+const getUserId = async () => {
+    return await new Promise((resolve, reject) => getItem(getLoginId(), (val) => {
+        resolve(val);
+    }));
+}
 
-const setUserId = (uid) => userId = uid;
+const setUserId = (uid) => {
+    console.log('setUserId -> ' + uid);
+    setItem(getLoginId(), uid);
+}
 
-const insertData = (collection, data, callback) => {
-    data.userId = getUserId();
-    // console.log('insertData start');
-    // console.log(data);
-    // console.log('insertData end');
+const log = async () => {
+    var orgId = await getUserId();
+    console.log('log userId -> ' + orgId);
+}
+const insertData = async (collection, data, callback) => {
+    data.userId = await getUserId();
     firestore()
     .collection(collection)
     .add(data)
@@ -27,15 +34,10 @@ const insertData = (collection, data, callback) => {
 }
 
 const insertOrUpdate = (collection, data, id) => {
-    // console.log('inserOrUpdate start');
-    // console.log(collection);
-    // console.log(data);
-    // console.log(id);
-    // console.log('inserOrUpdate end');
+    log();
     const coln = firestore()
     .collection(collection);
     coln.where('userId', '==', id).count().get().then(({_data : {count}}) => {
-        // console.log(count);
         if(count == 1){
            return; 
         }
@@ -44,6 +46,7 @@ const insertOrUpdate = (collection, data, id) => {
 }
 
 const deleteData = (collection, id, callback) => {
+    log();
     firestore()
     .collection(collection)
     .doc(id)
@@ -56,9 +59,10 @@ const deleteData = (collection, id, callback) => {
     });
 }
 
-const deleteMulipleData = (collection, conditions, callback) => {
+const deleteMulipleData = async (collection, conditions, callback) => {
+    log();
     conditions?.push([
-        'userId', '==', getUserId()
+        'userId', '==', await getUserId()
     ]);
     var firestoreObj = firestore()
     .collection(collection);
@@ -75,14 +79,15 @@ const deleteMulipleData = (collection, conditions, callback) => {
     });
 }
 
-const getSnapShot = (collection, callback, conditions = []) => {
+const getSnapShot = async (collection, callback, conditions = []) => {
     conditions?.push([
-        'userId', '==', getUserId()
+        'userId', '==', await getUserId()
     ]);
     return getSnapShotAll(collection, callback, conditions);
 }
 
 const getSnapShotAll = (collection, callback, conditions = []) => {
+    log();
     var firestoreObj = firestore()
     .collection(collection);
     conditions?.forEach(condition => {
@@ -94,6 +99,7 @@ const getSnapShotAll = (collection, callback, conditions = []) => {
 }
 
 const updateData = (collection, id, data, callback) => {
+    log();
     firestore()
     .collection(collection)
     .doc(id)
@@ -107,4 +113,4 @@ const updateData = (collection, id, data, callback) => {
 
 const isSharedOrg = () => getUserId() != auth().currentUser.uid
 
-export {insertData, deleteData, deleteMulipleData, getSnapShot, updateData, getUserId, userId, insertOrUpdate, getSnapShotAll, setUserId, isSharedOrg, getLoginId, getLoginEmail};
+export {insertData, deleteData, deleteMulipleData, getSnapShot, updateData, getUserId, insertOrUpdate, getSnapShotAll, setUserId, isSharedOrg, getLoginId, getLoginEmail};

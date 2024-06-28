@@ -112,13 +112,13 @@ export default function({route}){
       setDate(time);
       setModifyingTransactionId(id);
     }
+    let unsubscribeFn = null;
     useEffect(() => {
-      const subscriber = getSnapShot(collection, onSnapshot, [[
-        'chitFundId', '==', chitFund.id
-      ]]);
-  
+      getSnapShot(collection, onSnapshot).then((unsubscribe) => {
+        unsubscribeFn = unsubscribe;
+      });
       // Unsubscribe from events when no longer in use
-      return () => subscriber();
+      return () => unsubscribeFn()
     }, []);
     return (
         <SafeAreaView style={Styles.manageCanContainer}>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, Button, SafeAreaView, FlatList, View, TouchableHighlight, Alert, Image } from 'react-native';
+import { Text, View, TouchableHighlight, Alert, Image } from 'react-native';
 import Styles from '../StyleSheet';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -9,12 +9,14 @@ async function onGoogleButtonPress() {
   await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
   await GoogleSignin.signIn().then(({idToken})=>{
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    auth().signInWithCredential(googleCredential).then(({user: {displayName, email, uid}}) => {
+    auth().signInWithCredential(googleCredential).then((obj) => {
+      const {user, user: {displayName, email, uid}} = obj;
       insertOrUpdate('Users', {displayName, email, userId: uid, time: new Date().getTime()}, uid);
       setUserId(uid);
-    });
+    }).catch(err => console.log(err));
   }).catch((error)=>{
-    Alert.alert('Google Siginin Error -> ' + error)
+    Alert.alert('Google Siginin Error -> ' + error);
+    console.log('Google Siginin Error -> ' + error);
   });
 }
 

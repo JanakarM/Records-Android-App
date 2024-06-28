@@ -3,12 +3,9 @@ import React, { useEffect } from 'react';
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { color } from 'react-native-elements/dist/helpers';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
-import {userId, isSharedOrg} from '../utils/firestoreBroker';
+import {isSharedOrg} from '../utils/firestoreBroker';
 
 const ProfileMenu = ({photoUrl, nav, signOut}) => {
-  useEffect(()=>{
-
-  }, [userId])
   return (
         <View style={styles.container}>
           <Menu>

@@ -151,12 +151,14 @@ export default function(){
       setDate(time);
       setModifyingTransactionId(id);
     }
+    let unsubscribeFn = null;
     useEffect(() => {
-        const subscriber = getSnapShot(collection, onSnapshot);
-    
-        // Unsubscribe from events when no longer in use
-        return () => subscriber();
-      }, []);
+      getSnapShot(collection, onSnapshot).then((unsubscribe) => {
+        unsubscribeFn = unsubscribe;
+      });
+      // Unsubscribe from events when no longer in use
+      return () => unsubscribeFn()
+    }, []);
     const flatLists = [
         (
               <View
