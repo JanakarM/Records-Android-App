@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Text, Button, SafeAreaView, FlatList, View, Pressable, Alert, TouchableHighlight, TextInput, ScrollView } from 'react-native';
 import Styles from '../StyleSheet';
-import {setUserId, getSnapShotAll, getLoginId, getUserId, getLoginEmail} from '../utils/firestoreBroker';
+import {setUserId as setOrgId, getSnapShotAll, getLoginId, getUserId, getLoginEmail} from '../utils/firestoreBroker';
 import DropDown from '../components/DropDown';
 
 const userCollection = 'Users';
@@ -43,7 +43,7 @@ export default function({navigation}){
           setShared(shared);
     }
     const switchOrg = () => {
-        setUserId(user);
+       setOrgId(user);
         navigation.navigate('Home');
     }
     useEffect(() => {

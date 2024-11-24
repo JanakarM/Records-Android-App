@@ -111,6 +111,6 @@ const updateData = (collection, id, data, callback) => {
     });
 }
 
-const isSharedOrg = () => getUserId() != auth().currentUser.uid
+const isSharedOrg = async () => await getUserId() != auth().currentUser.uid
 
 export {insertData, deleteData, deleteMulipleData, getSnapShot, updateData, getUserId, insertOrUpdate, getSnapShotAll, setUserId, isSharedOrg, getLoginId, getLoginEmail};

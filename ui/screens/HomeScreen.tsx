@@ -5,12 +5,12 @@ import Styles from '../StyleSheet';
 export default function({navigation}){
     return (
         <SafeAreaView style={Styles.container}>
-            <TouchableHighlight 
+            {/* <TouchableHighlight 
             style={Styles.manageCanButton}
             underlayColor="#DDDDDD"
             onPress={()=>navigation.navigate('ManageCan')}>
                 <Text style={Styles.manageCanText}>Manage Cans</Text>
-            </TouchableHighlight>
+            </TouchableHighlight> */}
             <TouchableHighlight 
             style={Styles.manageCanButton}
             underlayColor="#DDDDDD"
@@ -22,6 +22,12 @@ export default function({navigation}){
             underlayColor="#DDDDDD"
             onPress={()=>navigation.navigate('ChitFund')}>
                 <Text style={Styles.manageCanText}>Manage Chit Funds</Text>
+            </TouchableHighlight>
+            <TouchableHighlight 
+            style={Styles.manageCanButton}
+            underlayColor="#DDDDDD"
+            onPress={()=>navigation.navigate('CreateRent')}>
+                <Text style={Styles.manageCanText}>Manage Rent</Text>
             </TouchableHighlight>
         </SafeAreaView>
     )

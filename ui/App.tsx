@@ -15,6 +15,7 @@ import { MenuProvider } from 'react-native-popup-menu';
 import ViewProfileScreen from './screens/ViewProfileScreen';
 import ShareScreen from './screens/ShareScreen';
 import SwitchOrgScreen from './screens/SwitchOrgScreen';
+import CreateRentScreen from './screens/CreateRentScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -72,6 +73,7 @@ const MyStack = () => {
           {Screen('ViewProfile', {title: 'View User Profile'}, ViewProfileScreen)}
           {Screen('ShareData', {title: 'Share Data'}, ShareScreen)}
           {Screen('SwitchOrg', {title: 'Switch Org'}, SwitchOrgScreen)}
+          {Screen('CreateRent', {title: 'Create Rent'}, CreateRentScreen)}
         </Stack.Navigator>
       </NavigationContainer>
     </MenuProvider>

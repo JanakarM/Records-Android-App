@@ -31,10 +31,11 @@ import {StyleSheet, Text, View} from 'react-native';
     },
     memoriesView: {
       marginTop: 15,
-      padding: 10
+      padding: 10,
+      height: '80%'
     },
     memoryListItem: {
-      flexDirection: 'column',
+      flexDirection: 'row',
       gap: 5,
       padding: 10,
       // borderBottomColor: 'white',
@@ -124,9 +125,7 @@ import {StyleSheet, Text, View} from 'react-native';
       fontWeight: 'bold'
     },
     editIcon: {
-      position: 'absolute',
-      right: 0,
-      bottom: '15%'
+      marginLeft: 'auto'
     },
     dropdown: {
       height: 50,
@@ -159,6 +158,11 @@ import {StyleSheet, Text, View} from 'react-native';
       top: 8,
       zIndex: 999,
       paddingHorizontal: 8,
-      fontSize: 14,
+      
+    },
+    serialNumber: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      marginRight: 20
     }
   });

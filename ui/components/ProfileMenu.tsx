@@ -1,11 +1,12 @@
 // ProfileMenu.js
-import React, { useEffect } from 'react';
-import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { color } from 'react-native-elements/dist/helpers';
+import React, { useState } from 'react';
+import { View, Image, StyleSheet } from 'react-native';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import {isSharedOrg} from '../utils/firestoreBroker';
 
 const ProfileMenu = ({photoUrl, nav, signOut}) => {
+  const [canShare, setCanShare] = useState(true); // Set loading to true on component mount
+  isSharedOrg().then(res => setCanShare(!res));
   return (
         <View style={styles.container}>
           <Menu>
@@ -18,7 +19,7 @@ const ProfileMenu = ({photoUrl, nav, signOut}) => {
             <MenuOptions>
               <MenuOption onSelect={() => {nav.navigate('ViewProfile')}} text="View Profile" />
               {
-                !isSharedOrg() ?
+                canShare ?
                 <MenuOption onSelect={() => {nav.navigate('ShareData')}} text="Share Data" />
                 :
                 ''

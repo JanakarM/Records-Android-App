@@ -8,14 +8,17 @@ import {deleteData, getSnapShot, insertData, updateData} from '../utils/firestor
 
 const collection = 'ChitFundTransactions';
 
-const ListItem = ({id, time, amount, deleteItem, editItem}) => {
+const ListItem = ({id, time, amount, deleteItem, editItem, index}) => {
   const date = new Date(parseFloat(time)).toDateString();  
   return (
       <Pressable
       onLongPress={() => deleteItem(id)}
       style={Styles.memoryListItem}>
-          <Text>{date}</Text>
-          <Text>{amount}</Text>
+          <Text style={Styles.serialNumber}>{index}</Text>
+          <View>
+            <Text>{date}</Text>
+            <Text>{amount}</Text>
+          </View>
           <Icon 
           onPress={() => editItem(id, amount, parseFloat(time))}
           name="edit"
@@ -40,10 +43,11 @@ export default function({route}){
     const onSnapshot = async(docs) => {
       const transactions = [];
       let paid = 0;
-        docs.forEach(doc => {
+        docs.forEach((doc, i) => {
           transactions.push({
             ...doc.data(),
             id: doc.id,
+            index: i+1
           });
           paid += parseInt(doc.data().amount);
         });
@@ -114,7 +118,9 @@ export default function({route}){
     }
     let unsubscribeFn = null;
     useEffect(() => {
-      getSnapShot(collection, onSnapshot).then((unsubscribe) => {
+      getSnapShot(collection, onSnapshot, [[
+        'chitFundId', '==', chitFund.id
+      ]]).then((unsubscribe) => {
         unsubscribeFn = unsubscribe;
       });
       // Unsubscribe from events when no longer in use
