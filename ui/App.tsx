@@ -16,6 +16,8 @@ import ViewProfileScreen from './screens/ViewProfileScreen';
 import ShareScreen from './screens/ShareScreen';
 import SwitchOrgScreen from './screens/SwitchOrgScreen';
 import CreateRentScreen from './screens/CreateRentScreen';
+import ListRentScreen from './screens/ListRentScreen';
+import RentTransactionScreen from './screens/ListRentTransactionScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -74,6 +76,8 @@ const MyStack = () => {
           {Screen('ShareData', {title: 'Share Data'}, ShareScreen)}
           {Screen('SwitchOrg', {title: 'Switch Org'}, SwitchOrgScreen)}
           {Screen('CreateRent', {title: 'Create Rent'}, CreateRentScreen)}
+          {Screen('ListRent', {title: 'Rent List'}, ListRentScreen)}
+          {Screen('RentTransaction',  ({route}) => ({title: route.params.rent.name}), RentTransactionScreen)}
         </Stack.Navigator>
       </NavigationContainer>
     </MenuProvider>

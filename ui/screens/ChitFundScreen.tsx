@@ -9,7 +9,7 @@ import {deleteData, getSnapShot, insertData, updateData} from '../utils/firestor
 var nav;
 const collection = 'ChitFunds';
 
-const ListItem = ({id, time, name, deleteItem, editItem}) => {
+const ListItem = ({id, time, name, deleteItem, editItem, index}) => {
   let date = new Date(parseFloat(time));
   date = (date.getMonth()+1) + '/' + date.getFullYear();
   const chitFund = {id, name, date};
@@ -18,8 +18,11 @@ const ListItem = ({id, time, name, deleteItem, editItem}) => {
       onPress={()=>nav.navigate('ChitFundTransaction', {chitFund})}
       onLongPress={() => deleteItem(id)}
       style={Styles.memoryListItem}>
+          <Text style={Styles.serialNumber}>{index}</Text>
+          <View>
           <Text>{date}</Text>
           <Text>{name}</Text>
+          </View>
           <Icon 
           onPress={() => editItem(id, name, parseFloat(time))}
           name="edit"
@@ -42,10 +45,11 @@ export default function({navigation}){
 
     const onSnapshot = async(docs) => {
         const chitFunds = [];
-          docs.forEach(doc => {
+          docs.forEach((doc, i) => {
             chitFunds.push({
               ...doc.data(),
               id: doc.id,
+              index: i+1
             });
           });
           setChitFunds(chitFunds);

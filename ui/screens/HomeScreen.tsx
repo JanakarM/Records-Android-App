@@ -26,7 +26,7 @@ export default function({navigation}){
             <TouchableHighlight 
             style={Styles.manageCanButton}
             underlayColor="#DDDDDD"
-            onPress={()=>navigation.navigate('CreateRent')}>
+            onPress={()=>navigation.navigate('ListRent')}>
                 <Text style={Styles.manageCanText}>Manage Rent</Text>
             </TouchableHighlight>
         </SafeAreaView>
