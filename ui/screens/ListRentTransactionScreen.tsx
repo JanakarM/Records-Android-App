@@ -9,22 +9,19 @@ import EmptyState from '../components/EmptyState';
 
 const collection = 'RentTransaction';
 
-const ListItem = ({id, time, name, advance, deleteItem, editItem, nav, index}) => {
-  let date = new Date(parseFloat(time));
-  date = (date.getMonth()+1) + '/' + date.getFullYear();
-  const rent = {id, name, advance, date};
+const ListItem = ({id, time, due, deleteItem, editItem, index}) => {
+  let date = new Date(time).toDateString();
   return (
       <Pressable
-      onPress={()=>nav.navigate('RentTransaction', {rent})}
       onLongPress={() => deleteItem(id)}
       style={StyleSheet.memoryListItem}>
           <Text style={StyleSheet.serialNumber}>{index}</Text>
           <View>
               <Text>{date}</Text>
-              <Text>{name}</Text>
+              <Text>{due}</Text>
           </View>
           <Icon
-          onPress={() => editItem(id, name, advance, parseFloat(time))}
+          onPress={() => editItem({id, due, time})}
           name="edit"
           size={30}
           color="blue"
@@ -33,8 +30,8 @@ const ListItem = ({id, time, name, advance, deleteItem, editItem, nav, index}) =
   )
 }
 
-const RentTransactionScreen = ({route, navigation}) => {
-    const [id] = route.params.rent.id;
+const ListRentTransactionScreen = ({route, navigation}) => {
+    const {id:rentId, name:rentName} = route.params.rent;
     const [rentTransactions, setRentTransactions] = useState()
 
     const onSnapshot = (docs) => {
@@ -50,21 +47,32 @@ const RentTransactionScreen = ({route, navigation}) => {
     }
 
     const editItem = (rentTransaction) => {
-      navigation.navigate('EditRent', {rent});
+      navigation.navigate('EditRentTransaction', {rentTransaction: {...rentTransaction, rentName}});
     };
 
-    const addItem = (rentTransaction) => {
-      navigation.navigate('CreateRent');
+    const addItem = () => {
+      navigation.navigate('CreateRentTransaction', {rent: route.params.rent});
     };
 
     const deleteItem = (id) => {
-      deleteData(collection, id, () => Alert.alert('Success', 'Rent deleted.'));
+      Alert.alert('Delete Rent', `Do you want delete this item?`, [
+        {
+          text: 'Delete',
+          onPress: () => {
+            deleteData(collection, id);
+          },
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        }
+      ]);
     };
 
+    var unsubscribeFn;
     useEffect(() => {
-      var unsubscribeFn = null;
       getSnapShot(collection, onSnapshot, [[
-        'rentId', '==', chitFund.id
+        'rentId', '==', rentId
       ]]).then((unsubscribe) => {
         unsubscribeFn = unsubscribe;
       });
@@ -78,7 +86,7 @@ const RentTransactionScreen = ({route, navigation}) => {
       style={StyleSheet.manageCanButton}
       underlayColor="#DDDDDD"
       onPress={addItem}>
-          <Text style={StyleSheet.addCanButtonText}>Create Rent Transaction</Text>
+          <Text style={StyleSheet.addCanButtonText}>Pay Rent Due</Text>
       </TouchableHighlight>
       <View
       style={StyleSheet.memoriesView}>
@@ -93,4 +101,4 @@ const RentTransactionScreen = ({route, navigation}) => {
     );
 };
 
-export default RentTransactionScreen;
+export default ListRentTransactionScreen;

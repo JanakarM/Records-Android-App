@@ -1,31 +1,32 @@
 import { Alert } from "react-native";
-import { insertData } from "../utils/firestoreBroker";
+import { insertData, updateData } from "../utils/firestoreBroker";
 import RentForm from "../components/RentForm";
 
 const collection = 'Rent';
 
-const EditRentScreen = ({route}) => {
-    const [date, name, advance] = route.params.rent;
+const EditRentScreen = ({route, navigation}) => {
+    const {id, time, name, amount, fixedDue} = route.params.rent;
 
-    const editItem = (date, name, advance) => {
-        if(!name || !advance){
+    const editItem = (time, name, advance, fixedDue) => {
+        if(!name || !advance || !fixedDue){
           Alert.alert('Error', 'Please provide a valid name and advance to update entry.');
           return;
         }
-        insertData(collection, {
-            time: date,
+        updateData(collection, id, {
+            time: time,
             amount: advance,
             name: name
-          }, () => Alert.alert('Success', 'Rent updated.'));
+          }, () => Alert.alert('Success', 'Rent updated.', [{text: 'View', onPress: () => navigation.navigate('ListRent')}]));
       }
 
     return (
         <RentForm
         action={editItem}
         actionLabel='Edit Rent'
-        pDate={date}
+        pDate={time}
         pName={name}
-        pAdvance={advance}
+        pAdvance={amount}
+        pFixedRentAmount={fixedDue}
         />
     );
 }

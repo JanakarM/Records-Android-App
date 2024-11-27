@@ -5,15 +5,16 @@ import RentForm from "../components/RentForm";
 const collection = 'Rent';
 
 const CreateRentScreen = ({navigation}) => {
-    const addItem = (date, name, advance) => {
-        if(!name || !advance){
+    const addItem = (date, name, advance, fixedDue) => {
+      if(!name || !advance || !fixedDue){
           Alert.alert('Error', 'Please provide a valid name and advance to create entry.');
           return;
         }
         insertData(collection, {
             time: date,
             amount: advance,
-            name: name
+            name,
+            fixedDue
           }, () =>  Alert.alert('Success', 'Rent Created', [
             {
               text: 'View',

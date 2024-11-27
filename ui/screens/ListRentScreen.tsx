@@ -9,22 +9,22 @@ import EmptyState from '../components/EmptyState';
 
 const collection = 'Rent';
 
-const ListItem = ({id, time, name, amount, deleteItem, editItem, nav, index}) => {
-    let date = new Date(parseFloat(time));
-    date = (date.getMonth()+1) + '/' + date.getFullYear();
-    const rent = {id, name, amount, date};
+const ListItem = ({id, time, name, amount, fixedDue, deleteItem, editItem, nav, index}) => {
+    let date = new Date(parseFloat(time)).toDateString();
+    const rent = {id, name, amount, time, fixedDue};
     return (
         <Pressable
-        onPress={()=>nav.navigate('RentTransaction', {rent})}
+        onPress={()=>nav.navigate('ListRentTransaction', {rent})}
         onLongPress={() => deleteItem(id)}
         style={StyleSheet.memoryListItem}>
             <Text style={StyleSheet.serialNumber}>{index}</Text>
             <View>
                 <Text>{date}</Text>
-                <Text>{name} ({amount})</Text>
+                <Text>{name}</Text>
+                <Text>{amount} / {fixedDue}</Text>
             </View>
             <Icon
-            onPress={() => editItem(id, name, amount, parseFloat(time))}
+            onPress={() => editItem(rent)}
             name="edit"
             size={30}
             color="blue"
@@ -71,7 +71,7 @@ const ListRentScreen = ({navigation}) => {
         navigation.navigate('CreateRent');
     };
 
-    var unsubscribeFn = null;
+    var unsubscribeFn;
     useEffect(() => {
         getSnapShot(collection, onSnapshot).then((unsubscribe) => {
           unsubscribeFn = unsubscribe;
