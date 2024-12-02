@@ -8,11 +8,12 @@ import DatePicker from '../components/DatePicker';
 
 const collection = 'Rent';
 
-const RentForm = ({action, actionLabel, pDate, pName, pAdvance, pFixedRentAmount}) => {
+const RentForm = ({action, actionLabel, pDate, pName, pAdvance, pFixedRentAmount, pRemindOnDay}) => {
     const [date, setDate] = useState(pDate)
     const [name, setName] = useState(pName)
     const [advance, setAdvance] = useState(pAdvance)
     const [fixedDue, setFixedDue] = useState(pFixedRentAmount)
+    const [remindOnDay, setRemindOnDay] = useState(pRemindOnDay)
 
     return (
         <SafeAreaView style={StyleSheet.manageCanContainer}>
@@ -40,10 +41,18 @@ const RentForm = ({action, actionLabel, pDate, pName, pAdvance, pFixedRentAmount
             placeholder='Enter the fixed rent amount.'
             keyboardType='number-pad'
             />
+            <Text style={StyleSheet.listHeading}>Remind on (Day of month)</Text>
+            <TextInput
+            value={remindOnDay}
+            onChangeText={c=>setRemindOnDay(c)}
+            style={StyleSheet.numberOfCansInput}
+            placeholder='Enter the day of month to remind on.'
+            keyboardType='number-pad'
+            />
             <TouchableHighlight
             style={StyleSheet.manageCanButton}
             underlayColor="#DDDDDD"
-            onPress={() => action(date, name, advance, fixedDue)}>
+            onPress={() => action(date, name, advance, fixedDue, remindOnDay)}>
                 <Text style={StyleSheet.addCanButtonText}>{actionLabel}</Text>
             </TouchableHighlight>
         </SafeAreaView>

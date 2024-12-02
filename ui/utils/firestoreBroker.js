@@ -26,7 +26,7 @@ const insertData = async (collection, data, callback) => {
     .collection(collection)
     .add(data)
     .then((a) => {
-        callback?.();
+        callback?.(a);
     }).catch((err) => {
         console.log('Insert data failed!');
         console.log(err);

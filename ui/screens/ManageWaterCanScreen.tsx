@@ -5,8 +5,8 @@ import DatePicker from '../components/DatePicker';
 import EmptyState from '../components/EmptyState';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {deleteData, deleteMulipleData, getSnapShot, insertData, updateData} from '../utils/firestoreBroker';
+import {getMonth, MONTHS} from '../utils/dateUtil';
 
-const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const collection = 'WaterCanEntries';
 
 const ListItem = ({id, time, count, deleteItem, editItem}) => {
@@ -53,7 +53,7 @@ export default function(){
     const onSnapshot = async(docs) => {
         const waterCanEntries = [], monVsCount={}, canSummary=[], monVsStartTime={}, monVsEndTIme={};
           docs.forEach(doc => {
-            const mon=MONTHS[new Date(parseFloat(doc.data().time)).getMonth()];
+            const mon=getMonth(doc.data().time);
             monVsCount[mon]=monVsCount[mon]!=undefined?monVsCount[mon]+parseInt(doc.data().count):parseInt(doc.data().count);
             if(monVsEndTIme[mon]===undefined){
               monVsEndTIme[mon]=doc.data().time;

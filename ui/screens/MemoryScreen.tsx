@@ -5,16 +5,20 @@ import DatePicker from '../components/DatePicker';
 import EmptyState from '../components/EmptyState';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {deleteData, getSnapShot, insertData, updateData} from '../utils/firestoreBroker';
+import StyleSheet from '../StyleSheet';
 
 const collection = 'Memories';
 
-const ListItem = ({id, time, memory, deleteItem, editItem}) => {
+const ListItem = ({id, time, memory, deleteItem, editItem, index}) => {
     return (
         <Pressable
         onLongPress={() => deleteItem(id)}
         style={Styles.memoryListItem}>
-            <Text>{new Date(parseFloat(time)).toDateString()}</Text>
-            <Text>{memory}</Text>
+            <Text style={StyleSheet.serialNumber}>{index}</Text>
+            <View>
+              <Text>{new Date(parseFloat(time)).toDateString()}</Text>
+              <Text>{memory}</Text>
+            </View>
             <Icon 
             onPress={() => editItem(id, memory, parseFloat(time))}
             name="edit"
@@ -37,10 +41,11 @@ export default function(){
 
     const onSnapshot = async(docs) => {
         const memories = [];
-          docs.forEach(doc => {
+          docs.forEach((doc, i) => {
             memories.push({
               ...doc.data(),
               id: doc.id,
+              index: i+1
             });
           });
           setMemories(memories);

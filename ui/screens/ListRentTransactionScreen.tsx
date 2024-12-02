@@ -31,7 +31,7 @@ const ListItem = ({id, time, due, deleteItem, editItem, index}) => {
 }
 
 const ListRentTransactionScreen = ({route, navigation}) => {
-    const {id:rentId, name:rentName} = route.params.rent;
+    const {id:rentId} = route.params.rent;
     const [rentTransactions, setRentTransactions] = useState()
 
     const onSnapshot = (docs) => {
@@ -47,7 +47,7 @@ const ListRentTransactionScreen = ({route, navigation}) => {
     }
 
     const editItem = (rentTransaction) => {
-      navigation.navigate('EditRentTransaction', {rentTransaction: {...rentTransaction, rentName}});
+      navigation.navigate('EditRentTransaction', {rentTransaction: {...rentTransaction, rent: route.params.rent}});
     };
 
     const addItem = () => {
@@ -90,6 +90,7 @@ const ListRentTransactionScreen = ({route, navigation}) => {
       </TouchableHighlight>
       <View
       style={StyleSheet.memoriesView}>
+        <Text style={StyleSheet.listHeading}>Dues</Text>
         <FlatList
         data={rentTransactions}
         keyExtractor={item=>item.id}

@@ -9,9 +9,9 @@ import EmptyState from '../components/EmptyState';
 
 const collection = 'Rent';
 
-const ListItem = ({id, time, name, amount, fixedDue, deleteItem, editItem, nav, index}) => {
+const ListItem = ({id, time, name, amount, fixedDue, remindOnDay, deleteItem, editItem, nav, index}) => {
     let date = new Date(parseFloat(time)).toDateString();
-    const rent = {id, name, amount, time, fixedDue};
+    const rent = {id, name, amount, time, fixedDue, remindOnDay};
     return (
         <Pressable
         onPress={()=>nav.navigate('ListRentTransaction', {rent})}
@@ -90,6 +90,7 @@ const ListRentScreen = ({navigation}) => {
             </TouchableHighlight>
             <View
             style={StyleSheet.memoriesView}>
+              <Text style={StyleSheet.listHeading}>Rents</Text>
               <FlatList
               data={rents}
               keyExtractor={item=>item.id}
