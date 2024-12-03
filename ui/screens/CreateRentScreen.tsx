@@ -1,8 +1,8 @@
 import { Alert } from "react-native";
 import { insertData } from "../utils/firestoreBroker";
 import RentForm from "../components/RentForm";
-import { addNotification, addReminder } from "../utils/notificationUtil";
-import { getCurrentMonth, getNextMonthDate } from "../utils/dateUtil";
+import { addReminder } from "../utils/notificationUtil";
+import { getNextMonthDate, MONTHS } from "../utils/dateUtil";
 
 const collection = 'Rent';
 
@@ -12,15 +12,6 @@ const CreateRentScreen = ({navigation}) => {
           Alert.alert('Error', 'Please provide a valid name and advance to create entry.');
           return;
         }
-        let today = new Date();
-        let day = today.getDay();
-        let scheduleDate = new Date();
-        if(day > remindOnDay) {
-          getNextMonthDate(scheduleDate, remindOnDay);
-        } else {
-          scheduleDate.setDate(remindOnDay);
-        }
-        console.log(scheduleDate.toDateString());
         insertData(collection, {
             time: date,
             amount: advance,
@@ -28,8 +19,16 @@ const CreateRentScreen = ({navigation}) => {
             fixedDue,
             remindOnDay
           }, (doc) =>  {
-            addReminder('Rent Due', `Its time to pay the rent for ${scheduleDate.getMonth()}`, doc.id);
-            Alert.alert('Success', 'Rent Created', [
+            let today = new Date();
+            let day = today.getDay();
+            let scheduleDate = new Date();
+            if(day > remindOnDay) {
+              getNextMonthDate(scheduleDate, remindOnDay);
+            } else {
+              scheduleDate.setDate(remindOnDay);
+            }
+            addReminder('Rent Due', `Its time to pay the rent for ${MONTHS[scheduleDate.getMonth()]}`, {id: doc.id, name, time: date, amount: advance, fixedDue, remindOnDay}, scheduleDate);
+            Alert.alert('Success', `Rent Created. You will be reminded to pay rent due on ${scheduleDate.toDateString()}`, [
               {
                 text: 'View',
                 onPress: () => {

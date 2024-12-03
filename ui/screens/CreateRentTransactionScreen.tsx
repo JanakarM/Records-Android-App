@@ -1,6 +1,8 @@
 import { Alert } from "react-native";
 import { insertData } from "../utils/firestoreBroker";
 import RentTransactionForm from "../components/RentTransactionForm";
+import { getNextMonthDate, MONTHS } from "../utils/dateUtil";
+import { addReminder } from "../utils/notificationUtil";
 
 const collection = 'RentTransaction';
 
@@ -15,7 +17,11 @@ const CreateRentTransactionScreen = ({navigation, route}) => {
             time: date,
             rentId: rentId,
             due
-          }, () =>  Alert.alert('Success', 'Rent due paid', [
+          }, 
+          () => {
+            let scheduleDate = getNextMonthDate();
+            addReminder('Rent Due', `Its time to pay the rent for ${MONTHS[scheduleDate.getMonth()]}`, route.params.rent, scheduleDate);
+            Alert.alert('Success', `Rent due paid. You will be reminded to pay next due on ${scheduleDate.toDateString()}`, [
             {
               text: 'View',
               onPress: () => {
@@ -26,7 +32,9 @@ const CreateRentTransactionScreen = ({navigation, route}) => {
               text: 'Cancel',
               style: 'cancel',
             }
-          ]));
+            ])
+          }
+        );
       }
 
     return (

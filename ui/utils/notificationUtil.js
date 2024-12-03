@@ -13,7 +13,7 @@ const createChannel = () => {
     (created) => console.log(`createChannel returned '${created}'`))
 }
 
-const addNotification = (channelId, title, message, id, date = new Date(Date.now() + 2 * 1000)) => {
+const addNotification = (channelId, title, message, params, date = new Date(Date.now())) => {
     checkPermissions((access) => {
         if(access) {
         PushNotification.localNotificationSchedule({
@@ -21,14 +21,15 @@ const addNotification = (channelId, title, message, id, date = new Date(Date.now
             title,
             message,
             date,
-            id
+            allowWhileIdle: true,
+            params
         });
         } else {
             requestPermission(POST_NOTIFICATIONS, NOFTIFICATION);
         }
     });
 }
-const addReminder = (title, message, id, date) => {
-    addNotification(REMINDER, title, message, id, date);
+const addReminder = (title, message, params, date) => {
+    addNotification(REMINDER, title, message, params, date);
 }
 export {createChannel, addNotification, addReminder}

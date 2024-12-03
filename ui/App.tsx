@@ -23,6 +23,8 @@ import CreateRentTransactionScreen from './screens/CreateRentTransactionScreen';
 import EditRentTransactionScreen from './screens/EditRentTransactionScreen';
 import { createChannel } from './utils/notificationUtil';
 
+export const navigationRef = React.createRef();
+
 const Stack = createNativeStackNavigator();
 
 const MyStack = () => {
@@ -73,7 +75,7 @@ const MyStack = () => {
   }
   return (
     <MenuProvider>
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         <Stack.Navigator>
           {Screen('Home', {title: 'Home'}, HomeScreen)}
           {Screen('ManageCan', {title: 'Manage Water Cans'}, ManageCanScreen)}
@@ -87,7 +89,7 @@ const MyStack = () => {
           {Screen('ListRent', {title: 'Rent List'}, ListRentScreen)}
           {Screen('EditRent',  {}, EditRentScreen, (route) => {route.params.rent.name})}
           {Screen('ListRentTransaction', {}, ListRentTransactionScreen, (route) => route.params.rent.name)}
-          {Screen('CreateRentTransaction', {}, CreateRentTransactionScreen, (route) => route.params.rent.name)}
+          {Screen('CreateRentTransaction', {}, CreateRentTransactionScreen, (route) => `${route.params.rent.name} - Pay due`)}
           {Screen('EditRentTransaction', {}, EditRentTransactionScreen, ({params:{rentTransaction:{time, rent:{name: rentName}}}}) =>  new Date(time).toLocaleDateString('en-us', { year: 'numeric', month: 'short' }) + ' - ' + rentName)}
         </Stack.Navigator>
       </NavigationContainer>

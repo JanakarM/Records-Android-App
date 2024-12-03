@@ -4,14 +4,14 @@ const getCurrentMonth = () => MONTHS[new Date().getMonth()];
 
 const getMonth = (time) => MONTHS[new Date(time).getMonth()];
 
-const getNextMonthDate = (date, day) => {
-    new Date().setMon
+const getNextMonthDate = (date = new Date(Date.now()), day = date.getDate()) => {
     const month = date.getMonth();
     if(month > 12) {
         date.setFullYear(date.getFullYear(), 1, day);
     } else{
         date.setMonth(month+1, day);
     }
+    return date;
 }
 
 export {MONTHS, getCurrentMonth, getMonth, getNextMonthDate};
