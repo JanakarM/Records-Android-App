@@ -6,7 +6,7 @@ const getMonth = (time) => MONTHS[new Date(time).getMonth()];
 
 const getNextMonthDate = (date = new Date(Date.now()), day = date.getDate()) => {
     const month = date.getMonth();
-    if(month > 12) {
+    if(month == 12) {
         date.setFullYear(date.getFullYear(), 1, day);
     } else{
         date.setMonth(month+1, day);

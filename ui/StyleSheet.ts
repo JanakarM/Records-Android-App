@@ -84,6 +84,12 @@ import {StyleSheet, Text, View} from 'react-native';
         // backgroundColor: 'darkgrey',
         alignItems: 'center'
     },
+    datePickerButton: {
+        padding: 10,
+        borderRadius: 20,
+        borderWidth: 0.5,
+        alignItems: 'center'
+    },
     addCanButtonText: {
       // color: 'white'
     },
@@ -101,7 +107,8 @@ import {StyleSheet, Text, View} from 'react-native';
       // color: 'white'
     },
     datePicker: {
-      // backgroundColor: '#F5FCFF'
+      flexDirection: 'row',
+      gap: 15
     },
     numberOfCansInput: {
       paddingHorizontal: 10,
@@ -112,7 +119,11 @@ import {StyleSheet, Text, View} from 'react-native';
       // color: 'black'
     },
     datePickerContainer: {
-      // backgroundColor: 'black'
+      flexDirection: 'row',
+      gap: 20,
+      alignItems: 'center',
+      marginVertical: 10,
+      marginBottom: 15
     },
     emptyState: {
       flex: 1,
@@ -157,12 +168,43 @@ import {StyleSheet, Text, View} from 'react-native';
       left: 22,
       top: 8,
       zIndex: 999,
-      paddingHorizontal: 8,
-      
+      paddingHorizontal: 8
     },
     serialNumber: {
       fontSize: 16,
       fontWeight: 'bold',
       marginRight: 20
+    },
+    centeredView: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    },
+    modalView: {
+      margin: 20,
+      gap: 10,
+      backgroundColor: 'white',
+      borderRadius: 20,
+      justifyContent: 'space-between',
+      padding: 15,
+      paddingBottom: 0,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.05,
+      shadowRadius: 4,
+      elevation: 5
+    },
+    modalHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      borderBottomWidth: 0.8,
+      paddingTop: 5,
+      paddingBottom: 15,
+      marginBottom: 10,
+      alignItems: 'center'
     }
   });
