@@ -17,7 +17,7 @@ const ListItem = ({id, time, memory, deleteItem, editItem, index}) => {
             <Text style={StyleSheet.serialNumber}>{index}</Text>
             <View>
               <Text>{new Date(parseFloat(time)).toDateString()}</Text>
-              <Text>{memory}</Text>
+              <Text style={{maxWidth: '90%'}}>{memory}</Text>
             </View>
             <Icon 
             onPress={() => editItem(id, memory, parseFloat(time))}
