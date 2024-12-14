@@ -20,7 +20,7 @@ const CreateRentScreen = ({navigation}) => {
             remindOnDay
           }, (doc) =>  {
             let today = new Date();
-            let day = today.getDay();
+            let day = today.getDate();
             let scheduleDate = new Date();
             if(day > remindOnDay) {
               getNextMonthDate(scheduleDate, remindOnDay);

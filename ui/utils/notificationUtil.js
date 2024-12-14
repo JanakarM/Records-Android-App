@@ -14,6 +14,9 @@ const createChannel = () => {
 }
 
 const addNotification = (channelId, title, message, params, date = new Date(Date.now())) => {
+    console.log(date);
+    date.setHours(9, 0, 0, 0);
+    console.log(date);
     checkPermissions((access) => {
         if(access) {
         PushNotification.localNotificationSchedule({
