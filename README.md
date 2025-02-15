@@ -1,4 +1,4 @@
-# 'Daily' android app developed using react native
+# 'Records' android app developed using react native
 
 ## APK file
 [daily.apk](https://drive.google.com/file/d/1Wbwp-l1CLiOIurd-K5oTchfOm3lmzHVt/view?usp=drive_link)
