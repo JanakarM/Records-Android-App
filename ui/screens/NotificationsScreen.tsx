@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
-import { getScheduledNotifications, cancelNotification, cancelAllNotifications } from '../utils/notificationUtil';
+import { getScheduledNotifications, cancelNotification as cancelNotificationUtil, cancelAllNotifications as cancelAllNotificationsUtil } from '../utils/notificationUtil';
 import { formatDate } from '../utils/dateUtil';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -33,7 +33,7 @@ const NotificationsScreen = () => {
     fetchNotifications();
   }, []);
 
-  const cancelNotification = (id: string) => {
+  const handleCancelNotification = (id: string) => {
     Alert.alert(
       "Cancel Notification",
       "Are you sure you want to cancel this notification?",
@@ -45,7 +45,7 @@ const NotificationsScreen = () => {
         {
           text: "Yes", 
           onPress: () => {
-            cancelNotification(id);
+            cancelNotificationUtil(id);
             fetchNotifications();
           }
         }
@@ -53,7 +53,7 @@ const NotificationsScreen = () => {
     );
   };
 
-  const cancelAllNotifications = () => {
+  const handleCancelAllNotifications = () => {
     Alert.alert(
       "Cancel All Notifications",
       "Are you sure you want to cancel all notifications?",
@@ -65,7 +65,7 @@ const NotificationsScreen = () => {
         {
           text: "Yes", 
           onPress: () => {
-            cancelAllNotifications();
+            cancelAllNotificationsUtil();
             fetchNotifications();
           }
         }
@@ -82,7 +82,7 @@ const NotificationsScreen = () => {
       </View>
       <TouchableOpacity 
         style={styles.cancelButton} 
-        onPress={() => cancelNotification(item.id)}
+        onPress={() => handleCancelNotification(item.id)}
       >
         <Icon name="cancel" size={24} color="#FF6B6B" />
       </TouchableOpacity>
@@ -96,7 +96,7 @@ const NotificationsScreen = () => {
         {notifications.length > 0 && (
           <TouchableOpacity 
             style={styles.cancelAllButton} 
-            onPress={cancelAllNotifications}
+            onPress={handleCancelAllNotifications}
           >
             <Text style={styles.cancelAllText}>Cancel All</Text>
           </TouchableOpacity>
