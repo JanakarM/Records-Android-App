@@ -22,6 +22,7 @@ import EditRentScreen from './screens/EditRentScreen';
 import CreateRentTransactionScreen from './screens/CreateRentTransactionScreen';
 import EditRentTransactionScreen from './screens/EditRentTransactionScreen';
 import DateCalculatorScreen from './screens/DateCalculatorScreen';
+import NotificationsScreen from './screens/NotificationsScreen';
 import { createChannel } from './utils/notificationUtil';
 
 export const navigationRef = React.createRef();
@@ -84,11 +85,12 @@ const MyStack = () => {
           {Screen('ChitFund', {title: 'Manage Chit Funds'}, ChitFundScreen)}
           {Screen('ChitFundTransaction', {}, ChitFundTransactionScreen, (route) => route.params.chitFund.name)}
           {Screen('ViewProfile', {title: 'View User Profile'}, ViewProfileScreen)}
+          {Screen('Notifications', {title: 'Manage Notifications'}, NotificationsScreen, null)}
           {Screen('ShareData', {title: 'Share Data'}, ShareScreen)}
           {Screen('SwitchOrg', {title: 'Switch Org'}, SwitchOrgScreen)}
           {Screen('CreateRent', {title: 'Create Rent'}, CreateRentScreen)}
           {Screen('ListRent', {title: 'Rent List'}, ListRentScreen)}
-          {Screen('EditRent',  {}, EditRentScreen, (route) => {route.params.rent.name})}
+          {Screen('EditRent',  {}, EditRentScreen, (route) => route.params.rent.name)}
           {Screen('ListRentTransaction', {}, ListRentTransactionScreen, (route) => route.params.rent.name)}
           {Screen('CreateRentTransaction', {}, CreateRentTransactionScreen, (route) => `${route.params.rent.name} - Pay due`)}
           {Screen('EditRentTransaction', {}, EditRentTransactionScreen, ({params:{rentTransaction:{time, rent:{name: rentName}}}}) =>  new Date(time).toLocaleDateString('en-us', { year: 'numeric', month: 'short' }) + ' - ' + rentName)}

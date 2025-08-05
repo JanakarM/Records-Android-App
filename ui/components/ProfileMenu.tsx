@@ -18,6 +18,7 @@ const ProfileMenu = ({photoUrl, nav, signOut}) => {
             </MenuTrigger>
             <MenuOptions>
               <MenuOption onSelect={() => {nav.navigate('ViewProfile')}} text="View Profile" />
+              <MenuOption onSelect={() => {nav.navigate('Notifications')}} text="Manage Notifications" />
               {
                 canShare ?
                 <MenuOption onSelect={() => {nav.navigate('ShareData')}} text="Share Data" />

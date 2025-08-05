@@ -3,7 +3,7 @@ import { checkPermissions, requestPermission } from "./permissionUtil";
 
 const REMINDER = 'reminder';
 const POST_NOTIFICATIONS = 'POST_NOTIFICATIONS';
-const NOFTIFICATION = 'Notification';
+const NOTIFICATION = 'Notification';
 
 const createChannel = () => {
     PushNotification.createChannel({
@@ -28,11 +28,31 @@ const addNotification = (channelId, title, message, params, date = new Date(Date
             params
         });
         } else {
-            requestPermission(POST_NOTIFICATIONS, NOFTIFICATION);
+            requestPermission(POST_NOTIFICATIONS, NOTIFICATION);
         }
     });
 }
 const addReminder = (title, message, params, date) => {
     addNotification(REMINDER, title, message, params, date);
 }
-export {createChannel, addNotification, addReminder}
+
+const getScheduledNotifications = (callback) => {
+    PushNotification.getScheduledLocalNotifications(callback);
+}
+
+const cancelNotification = (id) => {
+    PushNotification.cancelLocalNotification(id);
+}
+
+const cancelAllNotifications = () => {
+    PushNotification.cancelAllLocalNotifications();
+}
+
+export {
+    createChannel, 
+    addNotification, 
+    addReminder, 
+    getScheduledNotifications, 
+    cancelNotification, 
+    cancelAllNotifications
+}
