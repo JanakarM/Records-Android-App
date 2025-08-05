@@ -21,6 +21,7 @@ import ListRentTransactionScreen from './screens/ListRentTransactionScreen';
 import EditRentScreen from './screens/EditRentScreen';
 import CreateRentTransactionScreen from './screens/CreateRentTransactionScreen';
 import EditRentTransactionScreen from './screens/EditRentTransactionScreen';
+import DateCalculatorScreen from './screens/DateCalculatorScreen';
 import { createChannel } from './utils/notificationUtil';
 
 export const navigationRef = React.createRef();
@@ -91,6 +92,7 @@ const MyStack = () => {
           {Screen('ListRentTransaction', {}, ListRentTransactionScreen, (route) => route.params.rent.name)}
           {Screen('CreateRentTransaction', {}, CreateRentTransactionScreen, (route) => `${route.params.rent.name} - Pay due`)}
           {Screen('EditRentTransaction', {}, EditRentTransactionScreen, ({params:{rentTransaction:{time, rent:{name: rentName}}}}) =>  new Date(time).toLocaleDateString('en-us', { year: 'numeric', month: 'short' }) + ' - ' + rentName)}
+          {Screen('DateCalculator', {title: 'Date Calculator'}, DateCalculatorScreen)}
         </Stack.Navigator>
       </NavigationContainer>
     </MenuProvider>

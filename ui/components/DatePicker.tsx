@@ -5,12 +5,17 @@ import Styles from '../StyleSheet';
 import { Text } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default function App({date, updateSelectedDate}) {
+interface DatePickerProps {
+  selectedDate: Date;
+  onDateChange: (date: Date) => void;
+}
+
+export default function App({selectedDate, onDateChange}: DatePickerProps) {
   const [modalVisible, setModalVisible] = useState(false);
-  const [dateString, setDateString] = useState(new Date(date).toDateString());
-  const dateChanged = (selectedDate) => {
-    setDateString(new Date(selectedDate).toDateString());
-    updateSelectedDate(selectedDate);
+  const [dateString, setDateString] = useState(new Date(selectedDate).toDateString());
+  const dateChanged = (date: Date) => {
+    setDateString(new Date(date).toDateString());
+    onDateChange(date);
   }
   return (
     <View>
@@ -56,11 +61,17 @@ export default function App({date, updateSelectedDate}) {
             </View>
             <DateTimePicker
               mode="single"
-              date={date}
+              date={selectedDate}
               yearContainerStyle={Styles.datePickerContainer}
               monthContainerStyle={Styles.datePickerContainer}
               onChange={({date}) => {
-                    dateChanged(date);
+                    if (date) {
+                      // Handle any date type by converting to timestamp first
+                      const timestamp = new Date(date.toString()).getTime();
+                      if (!isNaN(timestamp)) {
+                        dateChanged(new Date(timestamp));
+                      }
+                    }
                   }
               }
             />

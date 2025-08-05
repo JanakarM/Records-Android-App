@@ -29,6 +29,12 @@ export default function({navigation}){
             onPress={()=>navigation.navigate('ListRent')}>
                 <Text style={Styles.manageCanText}>Manage Rent</Text>
             </TouchableHighlight>
+            <TouchableHighlight 
+            style={Styles.manageCanButton}
+            underlayColor="#DDDDDD"
+            onPress={()=>navigation.navigate('DateCalculator')}>
+                <Text style={Styles.manageCanText}>Date Calculator</Text>
+            </TouchableHighlight>
         </SafeAreaView>
     )
 }
