@@ -5,7 +5,7 @@ import DatePicker from '../components/DatePicker';
 import EmptyState from '../components/EmptyState';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {deleteData, getSnapShot, insertData, updateData} from '../utils/firestoreBroker';
-import {addReminder} from '../utils/notificationUtil';
+import {addReminder, cancelNotification, NOTIFICATION_TYPE_MEMORY} from '../utils/notificationUtil';
 import StyleSheet from '../StyleSheet';
 
 const collection = 'Memories';
@@ -82,8 +82,9 @@ export default function(){
           addReminder(
             'Memory Reminder', 
             `Reminder: ${memory.length > 50 ? memory.substring(0, 50) + '...' : memory}`, 
-            { id: doc.id, type: 'memory' },
-            reminderDate
+            doc.id,
+            reminderDate,
+            NOTIFICATION_TYPE_MEMORY
           );
           
           Alert.alert('Success', `Memory added with reminder set for ${reminderDate.toDateString()}`);
@@ -95,12 +96,22 @@ export default function(){
         {
           text: 'Delete',
           onPress: () => {
+            // Find the memory item to check if it has a reminder
+            const memoryItem = memories.find(item => item.id === id);
+            
+            // If the memory has a reminder, cancel the associated notification
+            if (memoryItem && memoryItem.reminderDate) {
+              // Cancel notification using the memory's ID and type
+              cancelNotification(id, NOTIFICATION_TYPE_MEMORY);
+            }
+            
+            // Delete the memory data
             deleteData(collection, id);
           },
         },
         {
           text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
+          onPress: () => {},
           style: 'cancel',
         }
       ]);
@@ -111,6 +122,16 @@ export default function(){
           text: 'Update',
           onPress: () => {
             const reminderDate = enableReminder && daysToRemind ? calculateReminderDate(date, daysToRemind) : null;
+            
+            // Find the memory item to check if it already has a reminder
+            const memoryItem = memories.find(item => item.id === modifyingTransactionId);
+            
+            // If the memory had a previous reminder, cancel it first
+            if (memoryItem && memoryItem.reminderDate) {
+              // Cancel the existing notification
+              cancelNotification(modifyingTransactionId, NOTIFICATION_TYPE_MEMORY);
+              // Notification cancelled
+            }
             
             updateData(collection, modifyingTransactionId, {
               time: date,
@@ -125,8 +146,9 @@ export default function(){
                 addReminder(
                   'Memory Reminder', 
                   `Reminder: ${memory.length > 50 ? memory.substring(0, 50) + '...' : memory}`, 
-                  { id: modifyingTransactionId, type: 'memory' },
-                  reminderDate
+                  modifyingTransactionId,
+                  reminderDate,
+                  NOTIFICATION_TYPE_MEMORY
                 );
                 
                 Alert.alert('Success', `Memory updated with reminder set for ${reminderDate.toDateString()}`);
@@ -136,7 +158,7 @@ export default function(){
         },
         {
           text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
+          onPress: () => {},
           style: 'cancel',
         }
       ]);
@@ -184,7 +206,7 @@ export default function(){
             {
               canModify ? (
                 <>
-                  <DatePicker date={date} updateSelectedDate={(dt) => setDate(dt.$d.getTime())}></DatePicker>
+                  <DatePicker selectedDate={new Date(date)} onDateChange={(dt) => setDate(dt.getTime())}></DatePicker>
                   <TextInput
                   value={memory}
                   onChangeText={c=>setMemory(c)}

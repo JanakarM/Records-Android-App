@@ -131,7 +131,7 @@ export default function({route}){
             {
               canModify ? (
                 <>
-                  <DatePicker date={date} updateSelectedDate={(dt) => setDate(dt.$d.getTime())}></DatePicker>
+                  <DatePicker selectedDate={new Date(date)} onDateChange={(dt) => setDate(dt.getTime())}></DatePicker>
                   <TextInput
                   value={amount}
                   onChangeText={c=>setAmount(c)}

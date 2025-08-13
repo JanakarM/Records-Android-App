@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
-import { getScheduledNotifications, cancelNotification as cancelNotificationUtil, cancelAllNotifications as cancelAllNotificationsUtil } from '../utils/notificationUtil';
+import { getScheduledNotifications, cancelNotification as cancelNotificationUtil, cancelAllNotifications as cancelAllNotificationsUtil, NOTIFICATION_TYPE_RENT, NOTIFICATION_TYPE_MEMORY } from '../utils/notificationUtil';
 import { formatDate } from '../utils/dateUtil';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-interface Notification {
-  id: string;
-  title: string;
-  message: string;
-  date: Date;
-}
+// Notification object structure:
+// - id
+// - title
+// - message
+// - date
 
 const NotificationsScreen = () => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchNotifications = () => {
     setLoading(true);
-    getScheduledNotifications((scheduledNotifications: any[]) => {
-      const formattedNotifications = scheduledNotifications.map((notification: any) => ({
+    getScheduledNotifications((scheduledNotifications) => {
+      const formattedNotifications = scheduledNotifications.map((notification) => ({
         id: notification.id,
         title: notification.title,
         message: notification.message,
@@ -33,7 +32,18 @@ const NotificationsScreen = () => {
     fetchNotifications();
   }, []);
 
-  const handleCancelNotification = (id: string) => {
+  const handleCancelNotification = (id) => {
+    // Extract notification type from the ID format (type_id)
+    let notificationType = null;
+    if (id.startsWith(`${NOTIFICATION_TYPE_RENT}_`)) {
+      notificationType = NOTIFICATION_TYPE_RENT;
+    } else if (id.startsWith(`${NOTIFICATION_TYPE_MEMORY}_`)) {
+      notificationType = NOTIFICATION_TYPE_MEMORY;
+    }
+    
+    // Get the actual ID without the type prefix
+    const actualId = notificationType ? id.substring(notificationType.length + 1) : id;
+    
     Alert.alert(
       "Cancel Notification",
       "Are you sure you want to cancel this notification?",
@@ -45,7 +55,7 @@ const NotificationsScreen = () => {
         {
           text: "Yes", 
           onPress: () => {
-            cancelNotificationUtil(id);
+            cancelNotificationUtil(actualId, notificationType);
             fetchNotifications();
           }
         }
@@ -73,7 +83,7 @@ const NotificationsScreen = () => {
     );
   };
 
-  const renderNotificationItem = ({ item }: { item: Notification }) => (
+  const renderNotificationItem = ({ item }) => (
     <View style={styles.notificationItem}>
       <View style={styles.notificationContent}>
         <Text style={styles.notificationTitle}>{item.title}</Text>

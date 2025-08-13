@@ -2,12 +2,15 @@ import { FlatList, TouchableHighlight, View, Pressable, Alert } from "react-nati
 import { Text } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
 import StyleSheet from "../StyleSheet";
-import { useEffect, useState } from "react";
+import React, {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { deleteData, getSnapShot } from "../utils/firestoreBroker";
 import EmptyState from '../components/EmptyState';
+import { cancelNotification, getScheduledNotifications, NOTIFICATION_TYPE_RENT } from "../utils/notificationUtil";
 
 const collection = 'RentTransaction';
+
+// Removed interface ListItemProps
 
 const ListItem = ({id, time, due, deleteItem, editItem, index}) => {
   let date = new Date(time).toDateString();
@@ -30,9 +33,15 @@ const ListItem = ({id, time, due, deleteItem, editItem, index}) => {
   )
 }
 
+// Removed RentTransaction and Rent interfaces
+
+
+
 const ListRentTransactionScreen = ({route, navigation}) => {
-    const {id:rentId} = route.params.rent;
-    const [rentTransactions, setRentTransactions] = useState()
+    const {id:rentId, name:rentName} = route.params.rent;
+    const [rentTransactions, setRentTransactions] = useState([]);
+    const [nextReminderDates, setNextReminderDates] = useState({});
+
 
     const onSnapshot = (docs) => {
       const rentTransactions = [];
@@ -43,7 +52,8 @@ const ListRentTransactionScreen = ({route, navigation}) => {
             index: i+1
           });
         });
-      setRentTransactions(rentTransactions)
+      setRentTransactions(rentTransactions);
+      fetchNextReminderDates(rentId);
     }
 
     const editItem = (rentTransaction) => {
@@ -55,10 +65,12 @@ const ListRentTransactionScreen = ({route, navigation}) => {
     };
 
     const deleteItem = (id) => {
-      Alert.alert('Delete Rent', `Do you want delete this item?`, [
+      Alert.alert('Delete Rent Transaction', `Do you want delete this item?`, [
         {
           text: 'Delete',
           onPress: () => {
+            // Cancel notification using the rent ID with the rent type
+            cancelNotification(rentId, NOTIFICATION_TYPE_RENT);
             deleteData(collection, id);
           },
         },
@@ -69,25 +81,60 @@ const ListRentTransactionScreen = ({route, navigation}) => {
       ]);
     };
 
+
+
+
+    // Fetch next reminder dates for this rent
+    const fetchNextReminderDates = (rentId) => {
+      getScheduledNotifications((scheduledNotifications) => {
+        const reminderDates = {};
+        
+        // Filter notifications for this rent
+        scheduledNotifications.forEach(notification => {
+          if (notification.id && notification.id.startsWith(`${NOTIFICATION_TYPE_RENT}_${rentId}`)) {
+            reminderDates[rentId] = notification.date;
+          }
+        });
+        
+        setNextReminderDates(reminderDates);
+      });
+    };
+    
     var unsubscribeFn;
     useEffect(() => {
+      // Get rent transactions for this rent
       getSnapShot(collection, onSnapshot, [[
         'rentId', '==', rentId
       ]]).then((unsubscribe) => {
         unsubscribeFn = unsubscribe;
       });
+      
       // Unsubscribe from events when no longer in use
-      return () => unsubscribeFn()
-    }, []);
-
+      return () => {
+        unsubscribeFn && unsubscribeFn();
+      }
+    }, [rentId]); // Re-run effect if rentId changes
+    
+    // No test functions needed in production code
+    
     return (
       <SafeAreaView style={StyleSheet.manageCanContainer}>
-      <TouchableHighlight
-      style={StyleSheet.manageCanButton}
-      underlayColor="#DDDDDD"
-      onPress={addItem}>
-          <Text style={StyleSheet.addCanButtonText}>Pay Rent Due</Text>
-      </TouchableHighlight>
+      <View>
+        <TouchableHighlight
+        style={StyleSheet.manageCanButton}
+        underlayColor="#DDDDDD"
+        onPress={addItem}>
+            <Text style={StyleSheet.addCanButtonText}>Pay Rent Due</Text>
+        </TouchableHighlight>
+        
+        {nextReminderDates[rentId] && (
+          <View style={{padding: 10, alignItems: 'center'}}>
+            <Text style={{color: '#007AFF', fontSize: 14}}>
+              Next reminder: {new Date(nextReminderDates[rentId]).toDateString()}
+            </Text>
+          </View>
+        )}
+      </View>
       <View
       style={StyleSheet.memoriesView}>
         <Text style={StyleSheet.listHeading}>Dues</Text>
@@ -95,7 +142,11 @@ const ListRentTransactionScreen = ({route, navigation}) => {
         data={rentTransactions}
         keyExtractor={item=>item.id}
         ListEmptyComponent={EmptyState}
-        renderItem={({ item }) => <ListItem {...item} deleteItem={deleteItem} editItem={editItem} nav={navigation}/>}
+        renderItem={({ item }) => <ListItem 
+          {...item} 
+          deleteItem={deleteItem} 
+          editItem={editItem} 
+        />}
         />
       </View>
   </SafeAreaView>

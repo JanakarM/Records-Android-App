@@ -128,7 +128,7 @@ export default function({navigation}){
             {
               canModify ? (
                 <>
-                  <DatePicker date={date} updateSelectedDate={(d) => setDate(d.$d.getTime())}></DatePicker>
+                  <DatePicker selectedDate={new Date(date)} onDateChange={(dt) => setDate(dt.getTime())}></DatePicker>
                   <TextInput
                   value={name}
                   onChangeText={c=>setName(c)}

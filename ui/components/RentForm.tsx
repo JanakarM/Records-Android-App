@@ -17,7 +17,7 @@ const RentForm = ({action, actionLabel, pDate, pName, pAdvance, pFixedRentAmount
 
     return (
         <SafeAreaView style={StyleSheet.manageCanContainer}>
-            <DatePicker date={date} updateSelectedDate={(dt) => setDate(dt.$d.getTime())}></DatePicker>
+            <DatePicker selectedDate={new Date(date)} onDateChange={(dt) => setDate(dt.getTime())}></DatePicker>
             <Text style={StyleSheet.listHeading}>Name</Text>
             <TextInput 
             value={name}
