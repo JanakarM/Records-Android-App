@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
-import { getScheduledNotifications, cancelNotification as cancelNotificationUtil, cancelAllNotifications as cancelAllNotificationsUtil, NOTIFICATION_TYPE_RENT, NOTIFICATION_TYPE_MEMORY } from '../utils/notificationUtil';
+import { getScheduledNotifications, cancelNotification as cancelNotificationUtil, cancelAllNotifications as cancelAllNotificationsUtil, NOTIFICATION_TYPE_RENT, NOTIFICATION_TYPE_MEMORY, NOTIFICATION_TYPE_BILL } from '../utils/notificationUtil';
 import { formatDate } from '../utils/dateUtil';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -39,6 +39,8 @@ const NotificationsScreen = () => {
       notificationType = NOTIFICATION_TYPE_RENT;
     } else if (id.startsWith(`${NOTIFICATION_TYPE_MEMORY}_`)) {
       notificationType = NOTIFICATION_TYPE_MEMORY;
+    } else if (id.startsWith(`${NOTIFICATION_TYPE_BILL}_`)) {
+      notificationType = NOTIFICATION_TYPE_BILL;
     }
     
     // Get the actual ID without the type prefix

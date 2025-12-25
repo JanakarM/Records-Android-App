@@ -6,6 +6,7 @@ const POST_NOTIFICATIONS = 'POST_NOTIFICATIONS';
 const NOTIFICATION = 'Notification';
 const NOTIFICATION_TYPE_RENT = 'rent';
 const NOTIFICATION_TYPE_MEMORY = 'memory';
+const NOTIFICATION_TYPE_BILL = 'bill';
 
 const createChannel = () => {
     PushNotification.createChannel({
@@ -62,5 +63,6 @@ export {
     cancelNotification, 
     cancelAllNotifications,
     NOTIFICATION_TYPE_RENT,
-    NOTIFICATION_TYPE_MEMORY
+    NOTIFICATION_TYPE_MEMORY,
+    NOTIFICATION_TYPE_BILL
 }

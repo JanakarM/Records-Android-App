@@ -23,6 +23,10 @@ import CreateRentTransactionScreen from './screens/CreateRentTransactionScreen';
 import EditRentTransactionScreen from './screens/EditRentTransactionScreen';
 import DateCalculatorScreen from './screens/DateCalculatorScreen';
 import NotificationsScreen from './screens/NotificationsScreen';
+import ListBillsScreen from './screens/ListBillsScreen';
+import CreateBillScreen from './screens/CreateBillScreen';
+import EditBillScreen from './screens/EditBillScreen';
+import { getBillTypeConfig } from './config/billTypes';
 import { createChannel } from './utils/notificationUtil';
 
 export const navigationRef = React.createRef();
@@ -95,6 +99,9 @@ const MyStack = () => {
           {Screen('CreateRentTransaction', {}, CreateRentTransactionScreen, (route) => `${route.params.rent.name} - Pay due`)}
           {Screen('EditRentTransaction', {}, EditRentTransactionScreen, ({params:{rentTransaction:{time, rent:{name: rentName}}}}) =>  new Date(time).toLocaleDateString('en-us', { year: 'numeric', month: 'short' }) + ' - ' + rentName)}
           {Screen('DateCalculator', {title: 'Date Calculator'}, DateCalculatorScreen)}
+          {Screen('ListBills', {}, ListBillsScreen, (route) => getBillTypeConfig(route.params.billType)?.label || 'Bills')}
+          {Screen('CreateBill', {}, CreateBillScreen, (route) => `Add ${getBillTypeConfig(route.params.billType)?.label || 'Bill'}`)}
+          {Screen('EditBill', {}, EditBillScreen, (route) => `Edit ${getBillTypeConfig(route.params.billType)?.label || 'Bill'}`)}
         </Stack.Navigator>
       </NavigationContainer>
     </MenuProvider>

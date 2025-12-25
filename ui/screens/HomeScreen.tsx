@@ -32,6 +32,12 @@ export default function({navigation}){
             <TouchableHighlight 
             style={Styles.manageCanButton}
             underlayColor="#DDDDDD"
+            onPress={()=>navigation.navigate('ListBills', {billType: 'lic'})}>
+                <Text style={Styles.manageCanText}>Manage LIC Bills</Text>
+            </TouchableHighlight>
+            <TouchableHighlight 
+            style={Styles.manageCanButton}
+            underlayColor="#DDDDDD"
             onPress={()=>navigation.navigate('DateCalculator')}>
                 <Text style={Styles.manageCanText}>Date Calculator</Text>
             </TouchableHighlight>
