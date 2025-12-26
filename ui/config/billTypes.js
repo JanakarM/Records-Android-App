@@ -50,6 +50,20 @@ export const BILL_TYPES = {
         placeholder: 'Enter premium amount',
         required: true,
       },
+      {
+        key: 'email',
+        label: 'Email',
+        type: 'text',
+        placeholder: 'Enter email address',
+        required: false,
+      },
+      {
+        key: 'dob',
+        label: 'Date of Birth',
+        type: 'date',
+        required: false,
+        default: new Date().getTime(),
+      },
     ],
     
     // Display format for list items

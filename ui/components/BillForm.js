@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, TextInput, TouchableHighlight, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StyleSheet from '../StyleSheet';
 import DropDown from './DropDown';
+import DatePicker from './DatePicker';
 import { getBillTypeConfig } from '../config/billTypes';
 
 const BillForm = ({ 
@@ -59,6 +60,17 @@ const BillForm = ({
               style={StyleSheet.numberOfCansInput}
               placeholder={field.placeholder}
               keyboardType="number-pad"
+            />
+          </View>
+        );
+
+      case 'date':
+        return (
+          <View key={field.key} style={styles.fieldContainer}>
+            <Text style={StyleSheet.listHeading}>{field.label}</Text>
+            <DatePicker
+              selectedDate={value ? new Date(value) : new Date()}
+              onDateChange={(val) => updateField(field.key, val.getTime())}
             />
           </View>
         );
