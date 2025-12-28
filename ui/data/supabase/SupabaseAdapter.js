@@ -10,8 +10,14 @@ import auth from '@react-native-firebase/auth';
 import { setItem, getItem } from 'react-native-shared-preferences';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config';
 
-// Initialize Supabase client
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Lazy initialize Supabase client (only when actually used)
+let supabase = null;
+const getSupabase = () => {
+  if (!supabase) {
+    supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+  return supabase;
+};
 
 const listeners = new Map();
 
@@ -79,7 +85,7 @@ const notifyListeners = async (collection) => {
  * Fetch data and call callback
  */
 const fetchAndNotify = async (collection, callback, conditions = []) => {
-  let query = supabase.from(collection).select('*');
+  let query = getSupabase().from(collection).select('*');
   
   // Apply conditions
   for (const [field, operator, value] of conditions) {
@@ -116,7 +122,7 @@ const insertData = async (collection, data, callback) => {
   
   data.userId = userId;
   
-  const { error } = await supabase.from(collection).insert({
+  const { error } = await getSupabase().from(collection).insert({
     id,
     user_id: userId,
     time,
@@ -139,7 +145,7 @@ const insertData = async (collection, data, callback) => {
  * Insert or update (for Users collection)
  */
 const insertOrUpdate = async (collection, data, id) => {
-  const { data: existing } = await supabase
+  const { data: existing } = await getSupabase()
     .from(collection)
     .select('id')
     .eq('user_id', id)
@@ -149,7 +155,7 @@ const insertOrUpdate = async (collection, data, id) => {
     const newId = generateId();
     const time = data.time || Date.now();
     
-    await supabase.from(collection).insert({
+    await getSupabase().from(collection).insert({
       id: newId,
       user_id: id,
       time,
@@ -164,7 +170,7 @@ const insertOrUpdate = async (collection, data, id) => {
  * Delete data by ID
  */
 const deleteData = async (collection, id, callback) => {
-  const { error } = await supabase.from(collection).delete().eq('id', id);
+  const { error } = await getSupabase().from(collection).delete().eq('id', id);
   
   if (error) {
     console.error(`Error deleting from ${collection}:`, error);
@@ -186,7 +192,7 @@ const deleteMulipleData = async (collection, conditions = [], callback) => {
   conditions.push(['userId', '==', userId]);
   
   // Fetch matching records first
-  let query = supabase.from(collection).select('id, data').eq('user_id', userId);
+  let query = getSupabase().from(collection).select('id, data').eq('user_id', userId);
   const { data: rows } = await query;
   
   if (!rows) {
@@ -211,7 +217,7 @@ const deleteMulipleData = async (collection, conditions = [], callback) => {
   }
   
   if (idsToDelete.length > 0) {
-    await supabase.from(collection).delete().in('id', idsToDelete);
+    await getSupabase().from(collection).delete().in('id', idsToDelete);
   }
   
   await notifyListeners(collection);
@@ -267,7 +273,7 @@ const getSnapShotAll = async (collection, callback, conditions = []) => {
     if (collectionListeners) {
       collectionListeners.delete(listenerId);
     }
-    supabase.removeChannel(channel);
+    getSupabase().removeChannel(channel);
   };
 };
 
@@ -276,7 +282,7 @@ const getSnapShotAll = async (collection, callback, conditions = []) => {
  */
 const updateData = async (collection, id, data, callback) => {
   // Fetch existing data
-  const { data: existing } = await supabase
+  const { data: existing } = await getSupabase()
     .from(collection)
     .select('data, time')
     .eq('id', id)
@@ -286,7 +292,7 @@ const updateData = async (collection, id, data, callback) => {
     const updatedData = { ...existing.data, ...data };
     const time = data.time || existing.time;
     
-    const { error } = await supabase
+    const { error } = await getSupabase()
       .from(collection)
       .update({ data: updatedData, time })
       .eq('id', id);
@@ -316,7 +322,7 @@ const isSharedOrg = async () => {
  * Get Supabase client (for backup operations)
  */
 const getDb = async () => {
-  return supabase;
+  return getSupabase();
 };
 
 // Export Supabase adapter implementation

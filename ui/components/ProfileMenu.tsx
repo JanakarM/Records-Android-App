@@ -48,7 +48,26 @@ const ProfileMenu = ({photoUrl, nav, signOut}) => {
           )}
           <MenuItem icon="exchange" label="Switch Org" onSelect={() => nav.navigate('SwitchOrg')} />
           <View style={styles.divider} />
-          <MenuItem icon="sign-out" label="Logout" onSelect={() => { signOut(); Alert.alert('Logged out'); }} danger />
+          <MenuItem 
+            icon="sign-out" 
+            label="Logout" 
+            onSelect={() => {
+              Alert.alert(
+                'Logout',
+                'Are you sure you want to logout?',
+                [
+                  { text: 'Cancel', style: 'cancel' },
+                  { 
+                    text: 'Logout', 
+                    style: 'destructive',
+                    onPress: () => signOut()
+                  },
+                ],
+                { cancelable: true }
+              );
+            }} 
+            danger 
+          />
         </MenuOptions>
       </Menu>
     </View>
