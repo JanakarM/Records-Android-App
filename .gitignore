@@ -67,3 +67,4 @@ yarn-error.log
 
 android/app/google-services.json
 **/**/package-lock.json
+exclusions
