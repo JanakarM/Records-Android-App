@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Text, Button, SafeAreaView, FlatList, View, Pressable, Alert, TouchableHighlight, TextInput, ScrollView } from 'react-native';
 import Styles from '../StyleSheet';
-import {setUserId as setOrgId, getSnapShotAll, getLoginId, getUserId, getLoginEmail} from '../utils/firestoreBroker';
+import {setUserId as setOrgId, getSnapShotAll, getLoginId, getUserId, getLoginEmail} from '../data/DataBrokerProvider';
 import DropDown from '../components/DropDown';
 
 const userCollection = 'Users';

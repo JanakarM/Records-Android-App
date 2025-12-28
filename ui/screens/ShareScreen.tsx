@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { Text, SafeAreaView, FlatList, View, Pressable, Alert, TouchableHighlight } from 'react-native';
 import Styles from '../StyleSheet';
 import EmptyState from '../components/EmptyState';
-import {deleteData, getSnapShot, insertData, getSnapShotAll, getLoginId} from '../utils/firestoreBroker';
+import {deleteData, getSnapShot, insertData, getSnapShotAll, getLoginId} from '../data/DataBrokerProvider';
 import DropDown from '../components/DropDown';
 
 const userCollection = 'Users';

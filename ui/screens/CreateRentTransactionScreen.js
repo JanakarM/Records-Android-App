@@ -1,5 +1,5 @@
 import { Alert } from "react-native";
-import { insertData } from "../utils/firestoreBroker";
+import { insertData } from '../data/DataBrokerProvider';
 import RentTransactionForm from "../components/RentTransactionForm";
 import { getNextMonthDate, MONTHS } from "../utils/dateUtil";
 import { addReminder, NOTIFICATION_TYPE_RENT } from "../utils/notificationUtil";

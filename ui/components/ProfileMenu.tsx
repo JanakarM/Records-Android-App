@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
-import {isSharedOrg} from '../utils/firestoreBroker';
+import {isSharedOrg} from '../data/DataBrokerProvider';
 
 const ProfileMenu = ({photoUrl, nav, signOut}) => {
   const [canShare, setCanShare] = useState(true); // Set loading to true on component mount

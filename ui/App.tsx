@@ -28,6 +28,7 @@ import CreateBillScreen from './screens/CreateBillScreen';
 import EditBillScreen from './screens/EditBillScreen';
 import { getBillTypeConfig } from './config/billTypes';
 import { createChannel } from './utils/notificationUtil';
+import { initDatabase } from './data/DataBrokerProvider';
 
 export const navigationRef = React.createRef();
 
@@ -69,6 +70,7 @@ const MyStack = () => {
     });
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     createChannel();
+    initDatabase(); // Initialize SQLite database
     return subscriber; // unsubscribe on unmount
   }, []);
 
