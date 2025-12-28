@@ -74,17 +74,19 @@ export default function(){
       ]);
     }
     useEffect(() => {
-        const subscriber = getSnapShotAll(userCollection, onUserSnapshot, [['userId', 'not-in', [getLoginId()]]]);
-    
-        // Unsubscribe from events when no longer in use
-        return () => subscriber();
+        let unsubscribe = () => {};
+        getSnapShotAll(userCollection, onUserSnapshot, [['userId', 'not-in', [getLoginId()]]]).then(unsub => {
+          unsubscribe = unsub;
+        });
+        return () => unsubscribe();
         }, []);
 
     useEffect(() => {
-        const subscriber = getSnapShot(shareCollection, onShareSnapshot);
-    
-        // Unsubscribe from events when no longer in use
-        return () => subscriber();
+        let unsubscribe = () => {};
+        getSnapShot(shareCollection, onShareSnapshot).then(unsub => {
+          unsubscribe = unsub;
+        });
+        return () => unsubscribe();
         }, []);
 
     useEffect(() => {

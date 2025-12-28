@@ -5,27 +5,28 @@
  * Change the ACTIVE_ADAPTER to switch between different databases.
  * 
  * Supported adapters:
- * - 'sqlite' : Local SQLite database
- * - 'firestore' : Firebase Firestore (cloud)
+ * - 'sqlite'   : Local SQLite database
+ * - 'supabase' : Supabase cloud database with real-time sync
  * 
  * To add a new adapter:
- * 1. Create adapter in ./adapters/ folder
+ * 1. Create adapter in ./adapters/ or ./supabase/ folder
  * 2. Import it here
  * 3. Add to ADAPTERS object
  */
 
 import SQLiteAdapter from './adapters/SQLiteAdapter';
+import SupabaseAdapter from './supabase/SupabaseAdapter';
 import { validateBrokerImplementation } from './DataBroker';
 
 // Available adapters
 const ADAPTERS = {
   sqlite: SQLiteAdapter,
-  // firestore: FirestoreAdapter, // Uncomment when needed
+  supabase: SupabaseAdapter,
 };
 
 // Active adapter configuration
 // Change this to switch database implementations
-const ACTIVE_ADAPTER = 'sqlite';
+const ACTIVE_ADAPTER = 'supabase';
 
 // Get the active adapter
 const getAdapter = () => {

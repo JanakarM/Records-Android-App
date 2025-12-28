@@ -67,3 +67,6 @@ yarn-error.log
 
 android/app/google-services.json
 **/**/package-lock.json
+ui/data/supabase/config.js
+create_keystore.sh
+package-lock.json
