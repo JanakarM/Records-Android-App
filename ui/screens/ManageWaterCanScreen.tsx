@@ -4,7 +4,7 @@ import Styles from '../StyleSheet';
 import DatePicker from '../components/DatePicker';
 import EmptyState from '../components/EmptyState';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {deleteData, deleteMulipleData, getSnapShot, insertData, updateData} from '../utils/firestoreBroker';
+import {deleteData, deleteMulipleData, getSnapShot, insertData, updateData} from '../data/DataBrokerProvider';
 import {getMonth, MONTHS} from '../utils/dateUtil';
 
 const collection = 'WaterCanEntries';

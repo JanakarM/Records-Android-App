@@ -1,5 +1,5 @@
 import { Alert } from "react-native";
-import { updateData } from "../utils/firestoreBroker";
+import { updateData } from "../data/DataBrokerProvider";
 import RentForm from "../components/RentForm";
 
 const collection = 'Rent';

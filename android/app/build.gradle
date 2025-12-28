@@ -120,7 +120,6 @@ android {
         versionName "1.0"
     }
     def pass = retrievePassword()
-    println "JanakarM -> " + pass + ' -> ' + MYAPP_RELEASE_STORE_FILE + ' ' + MYAPP_RELEASE_KEY_ALIAS
     signingConfigs {
         debug {
             storeFile file('debug.keystore')

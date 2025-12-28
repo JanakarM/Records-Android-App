@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alert } from 'react-native';
 import BillForm from '../components/BillForm';
-import { insertData } from '../utils/firestoreBroker';
+import { insertData } from '../data/DataBrokerProvider';
 import { getBillTypeConfig } from '../config/billTypes';
 
 const COLLECTION = 'Bills';

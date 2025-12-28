@@ -1,5 +1,5 @@
 import { Alert } from "react-native";
-import { insertData, updateData } from "../utils/firestoreBroker";
+import { insertData, updateData } from '../data/DataBrokerProvider';
 import RentTransactionForm from "../components/RentTransactionForm";
 import { SafeAreaView } from "react-native-safe-area-context";
 import StyleSheet from "../StyleSheet";

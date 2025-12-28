@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { Text, SafeAreaView, FlatList, View, Pressable, Alert, TouchableHighlight } from 'react-native';
 import Styles from '../StyleSheet';
 import EmptyState from '../components/EmptyState';
-import {deleteData, getSnapShot, insertData, getSnapShotAll, getLoginId} from '../utils/firestoreBroker';
+import {deleteData, getSnapShot, insertData, getSnapShotAll, getLoginId} from '../data/DataBrokerProvider';
 import DropDown from '../components/DropDown';
 
 const userCollection = 'Users';
@@ -74,17 +74,19 @@ export default function(){
       ]);
     }
     useEffect(() => {
-        const subscriber = getSnapShotAll(userCollection, onUserSnapshot, [['userId', 'not-in', [getLoginId()]]]);
-    
-        // Unsubscribe from events when no longer in use
-        return () => subscriber();
+        let unsubscribe = () => {};
+        getSnapShotAll(userCollection, onUserSnapshot, [['userId', 'not-in', [getLoginId()]]]).then(unsub => {
+          unsubscribe = unsub;
+        });
+        return () => unsubscribe();
         }, []);
 
     useEffect(() => {
-        const subscriber = getSnapShot(shareCollection, onShareSnapshot);
-    
-        // Unsubscribe from events when no longer in use
-        return () => subscriber();
+        let unsubscribe = () => {};
+        getSnapShot(shareCollection, onShareSnapshot).then(unsub => {
+          unsubscribe = unsub;
+        });
+        return () => unsubscribe();
         }, []);
 
     useEffect(() => {

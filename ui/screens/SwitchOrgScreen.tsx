@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Text, Button, SafeAreaView, FlatList, View, Pressable, Alert, TouchableHighlight, TextInput, ScrollView } from 'react-native';
 import Styles from '../StyleSheet';
-import {setUserId as setOrgId, getSnapShotAll, getLoginId, getUserId, getLoginEmail} from '../utils/firestoreBroker';
+import {setUserId as setOrgId, getSnapShotAll, getLoginId, getUserId, getLoginEmail} from '../data/DataBrokerProvider';
 import DropDown from '../components/DropDown';
 
 const userCollection = 'Users';
@@ -19,9 +19,14 @@ export default function({navigation}){
       let shareData = users.filter(user => sharedIds.includes(user.userId) || user.userId == getLoginId());
       setSharedOrg(shareData);
     }
-    getUserId().then(userId => {
-      setUserId(userId);
-    });
+    
+    useEffect(() => {
+      let mounted = true;
+      getUserId().then(id => {
+        if (mounted) setUserId(id);
+      });
+      return () => { mounted = false; };
+    }, []);
     const onUserSnapshot = (docs) => {
         let users = [];
         docs.forEach(doc => {
@@ -47,16 +52,19 @@ export default function({navigation}){
         navigation.navigate('Home');
     }
     useEffect(() => {
-        const subscriber = getSnapShotAll(userCollection, onUserSnapshot);
-    
-        // Unsubscribe from events when no longer in use
-        return () => subscriber();
+        let unsubscribe = () => {};
+        getSnapShotAll(userCollection, onUserSnapshot).then(unsub => {
+          unsubscribe = unsub;
+        });
+        return () => unsubscribe();
         }, []);
 
     useEffect(() => {
-        const subscriber = getSnapShotAll(shareCollection, onShareSnapshot, [['sharedWith', '==', getLoginEmail()]]);
-        // Unsubscribe from events when no longer in use
-        return () => subscriber();
+        let unsubscribe = () => {};
+        getSnapShotAll(shareCollection, onShareSnapshot, [['sharedWith', '==', getLoginEmail()]]).then(unsub => {
+          unsubscribe = unsub;
+        });
+        return () => unsubscribe();
         }, []);
     
     useEffect(() => updateShared(), [users, shared]);

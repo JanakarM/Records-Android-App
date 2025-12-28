@@ -1,37 +1,37 @@
 import React, {useEffect, useState} from 'react';
-import { Text, Button, SafeAreaView, FlatList, View, Pressable, Alert, TouchableHighlight, TextInput, ScrollView, Switch } from 'react-native';
-import Styles from '../StyleSheet';
+import { Text, SafeAreaView, FlatList, View, Pressable, Alert, TouchableOpacity, TextInput, Switch, StyleSheet as RNStyleSheet } from 'react-native';
 import DatePicker from '../components/DatePicker';
-import EmptyState from '../components/EmptyState';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {deleteData, getSnapShot, insertData, updateData} from '../utils/firestoreBroker';
+import {deleteData, getSnapShot, insertData, updateData} from '../data/DataBrokerProvider';
 import {addReminder, cancelNotification, NOTIFICATION_TYPE_MEMORY} from '../utils/notificationUtil';
-import StyleSheet from '../StyleSheet';
 
+const COLORS = {
+  bg: '#fafafa',
+  card: '#fff',
+  accent: '#5c6bc0',
+  text: '#37474f',
+  textLight: '#78909c',
+};
 const collection = 'Memories';
 
-const ListItem = ({id, time, memory, deleteItem, editItem, index, reminderDate}) => {
+const ListItem = ({id, time, memory, deleteItem, editItem, reminderDate}) => {
+    const date = new Date(parseFloat(time));
+    const formattedDate = date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+    
     return (
-        <Pressable
-        onLongPress={() => deleteItem(id)}
-        style={Styles.memoryListItem}>
-            <Text style={StyleSheet.serialNumber}>{index}</Text>
-            <View>
-              <Text>{new Date(parseFloat(time)).toDateString()}</Text>
-              <Text style={{maxWidth: '90%'}}>{memory}</Text>
-              {reminderDate && (
-                <Text style={{color: '#007AFF', fontSize: 12, marginTop: 4}}>
-                  Reminder set for: {new Date(parseFloat(reminderDate)).toDateString()}
-                </Text>
-              )}
-            </View>
-            <Icon 
-            onPress={() => editItem(id, memory, parseFloat(time))}
-            name="edit"
-            size={25}
-            color="blue"
-            style={Styles.editIcon}
-            />
+        <Pressable onLongPress={() => deleteItem(id)} style={styles.card}>
+          <View style={styles.iconWrap}>
+            <Icon name="lightbulb-o" size={16} color={COLORS.accent} />
+          </View>
+          <View style={styles.cardContent}>
+            <Text style={styles.cardTitle} numberOfLines={2}>{memory}</Text>
+            <Text style={styles.cardSubtitle}>
+              {formattedDate}{reminderDate ? ` · Reminder ${new Date(parseFloat(reminderDate)).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}` : ''}
+            </Text>
+          </View>
+          <TouchableOpacity onPress={() => editItem(id, memory, parseFloat(time))}>
+            <Icon name="chevron-right" size={14} color={COLORS.textLight} />
+          </TouchableOpacity>
         </Pressable>
     )
 }
@@ -202,74 +202,165 @@ export default function(){
       return () => unsubscribeFn()
     }, []);
     return (
-        <SafeAreaView style={Styles.manageCanContainer}>
-            {
-              canModify ? (
-                <>
-                  <DatePicker selectedDate={new Date(date)} onDateChange={(dt) => setDate(dt.getTime())}></DatePicker>
-                  <TextInput
+        <SafeAreaView style={styles.container}>
+            {/* Form */}
+            {canModify && (
+              <View style={styles.formCard}>
+                <DatePicker selectedDate={new Date(date)} onDateChange={(dt) => setDate(dt.getTime())} />
+                <TextInput
                   value={memory}
                   onChangeText={c=>setMemory(c)}
-                  style={Styles.numberOfCansInput}
-                  placeholder='Enter the memory to recall later.'
-                  // placeholderTextColor='black'
+                  style={styles.textInput}
+                  placeholder='What do you want to remember?'
+                  placeholderTextColor={COLORS.textLight}
+                  multiline
+                />
+                <View style={styles.reminderRow}>
+                  <Icon name="bell-o" size={14} color={COLORS.accent} style={{marginRight: 8}} />
+                  <Text style={styles.formLabel}>Remind me</Text>
+                  <Switch
+                    value={enableReminder}
+                    onValueChange={setEnableReminder}
+                    trackColor={{false: '#ddd', true: COLORS.accent + '50'}}
+                    thumbColor={enableReminder ? COLORS.accent : '#f4f3f4'}
                   />
-                  
-                  <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
-                    <Text style={Styles.listHeading}>Set reminder</Text>
-                    <Switch
-                      value={enableReminder}
-                      onValueChange={setEnableReminder}
-                      style={{ marginLeft: 10 }}
-                    />
-                  </View>
-                  
-                  {enableReminder && (
-                    <>
-                      <Text style={Styles.listHeading}>Days to remind after</Text>
-                      <TextInput
-                        value={daysToRemind}
-                        onChangeText={c=>setDaysToRemind(c)}
-                        style={Styles.numberOfCansInput}
-                        placeholder='Enter number of days after to remind'
-                        keyboardType='number-pad'
-                      />
-                      {daysToRemind ? (
-                        <Text style={{ color: '#007AFF', marginTop: 5 }}>
-                          Reminder will be set for: {new Date(calculateReminderDate(date, daysToRemind)).toDateString()}
-                        </Text>
-                      ) : null}
-                    </>
-                  )}
-                </>
-              ) : ''
-            }
-            {
-              isEdit ?
-              <TouchableHighlight
-              style={Styles.manageCanButton}
-              underlayColor="#DDDDDD"
-              onPress={updateItem}>
-                  <Text style={Styles.addCanButtonText}>Update Memory</Text>
-              </TouchableHighlight>
-              :
-              <TouchableHighlight
-              style={Styles.manageCanButton}
-              underlayColor="#DDDDDD"
-              onPress={addMemory}>
-                  <Text style={Styles.addCanButtonText}>Add Memory</Text>
-              </TouchableHighlight>
-            }
-            <View
-            style={Styles.memoriesView}>
-              <Text style={Styles.listHeading}>Memories</Text>
-              <FlatList
+                </View>
+                {enableReminder && (
+                  <TextInput
+                    value={daysToRemind}
+                    onChangeText={c=>setDaysToRemind(c)}
+                    style={styles.textInput}
+                    placeholder='Days from now'
+                    placeholderTextColor={COLORS.textLight}
+                    keyboardType='number-pad'
+                  />
+                )}
+              </View>
+            )}
+
+            {/* List */}
+            <FlatList
               data={memories}
               keyExtractor={item=>item.id}
-              ListEmptyComponent={EmptyState}
+              contentContainerStyle={styles.list}
+              showsVerticalScrollIndicator={false}
+              ListEmptyComponent={
+                <View style={styles.empty}>
+                  <Icon name="lightbulb-o" size={40} color={COLORS.textLight} />
+                  <Text style={styles.emptyText}>No memories yet</Text>
+                </View>
+              }
               renderItem={({ item }) => <ListItem {...item} deleteItem={deleteMemory} editItem={editItem}/>}
-              />
-            </View>
+            />
+
+            {/* FAB */}
+            <TouchableOpacity style={styles.fab} activeOpacity={0.8} onPress={isEdit ? updateItem : addMemory}>
+              <Icon name={isEdit ? "check" : (canModify ? "check" : "plus")} size={20} color="#fff" />
+            </TouchableOpacity>
         </SafeAreaView>
     )
 }
+
+const styles = RNStyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.bg,
+  },
+  formCard: {
+    backgroundColor: COLORS.card,
+    margin: 16,
+    marginBottom: 0,
+    borderRadius: 12,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 1,
+  },
+  formLabel: {
+    fontSize: 14,
+    color: COLORS.text,
+    flex: 1,
+  },
+  textInput: {
+    backgroundColor: COLORS.bg,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    fontSize: 15,
+    color: COLORS.text,
+    marginTop: 10,
+  },
+  reminderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 14,
+  },
+  list: {
+    padding: 16,
+    flexGrow: 1,
+  },
+  card: {
+    backgroundColor: COLORS.card,
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 1,
+  },
+  iconWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: 8,
+    backgroundColor: COLORS.accent + '12',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  cardContent: {
+    flex: 1,
+  },
+  cardTitle: {
+    fontSize: 15,
+    fontWeight: '500',
+    color: COLORS.text,
+  },
+  cardSubtitle: {
+    fontSize: 13,
+    color: COLORS.textLight,
+    marginTop: 2,
+  },
+  fab: {
+    position: 'absolute',
+    bottom: 24,
+    right: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: COLORS.accent,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: COLORS.accent,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  empty: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 80,
+  },
+  emptyText: {
+    fontSize: 15,
+    color: COLORS.textLight,
+    marginTop: 12,
+  },
+});

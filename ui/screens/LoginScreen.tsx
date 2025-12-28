@@ -3,7 +3,7 @@ import { Text, View, TouchableHighlight, Alert, Image } from 'react-native';
 import Styles from '../StyleSheet';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import {insertOrUpdate, setUserId} from '../utils/firestoreBroker';
+import {insertOrUpdate, setUserId} from '../data/DataBrokerProvider';
 
 async function onGoogleButtonPress() {
   await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
