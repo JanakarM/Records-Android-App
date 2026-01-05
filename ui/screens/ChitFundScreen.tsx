@@ -67,7 +67,7 @@ export default function({navigation}){
         return;
       }
       if(name == ''){
-        Alert.alert('Error', 'Please provide a chit fund name to create entry.');
+        Alert.alert('Missing Information', 'Please enter a name for the chit fund.');
         return;  
       }
       insertData(collection, {
@@ -76,7 +76,7 @@ export default function({navigation}){
       }, () => setCanModify(false));
     }
     const deleteItem = (id) => {
-      Alert.alert('Delete Item', 'Do you want delete this item?', [
+      Alert.alert('Delete Chit Fund', 'Are you sure you want to delete this chit fund?', [
         {
           text: 'Delete',
           style: 'destructive',
@@ -91,7 +91,7 @@ export default function({navigation}){
       ]);
     }
     const updateItem = () => {
-      Alert.alert('Update Item', 'Do you want update this item?', [
+      Alert.alert('Update Chit Fund', 'Save changes to this chit fund?', [
         {
           text: 'Update',
           onPress: () => {

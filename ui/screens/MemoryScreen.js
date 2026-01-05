@@ -65,7 +65,7 @@ export default function(){
         return;
       }
       if(memory == ''){
-        Alert.alert('Error', 'Please provide a memory to create entry.');
+        Alert.alert('Missing Information', 'Please enter a memory to save.');
         return;  
       }
       const reminderDate = enableReminder && daysToRemind ? calculateReminderDate(date, daysToRemind) : null;
@@ -87,12 +87,12 @@ export default function(){
             NOTIFICATION_TYPE_MEMORY
           );
           
-          Alert.alert('Success', `Memory added with reminder set for ${reminderDate.toDateString()}`);
+          Alert.alert('Memory Saved', `Reminder set for ${reminderDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}`);
         }
       });
     }
     const deleteMemory = (id) => {
-      Alert.alert('Delete Item', 'Do you want delete this item?', [
+      Alert.alert('Delete Memory', 'Are you sure you want to delete this memory?', [
         {
           text: 'Delete',
           onPress: () => {
@@ -117,7 +117,7 @@ export default function(){
       ]);
     }
     const updateItem = () => {
-      Alert.alert('Update Item', 'Do you want update this item?', [
+      Alert.alert('Update Memory', 'Save changes to this memory?', [
         {
           text: 'Update',
           onPress: () => {
@@ -151,7 +151,7 @@ export default function(){
                   NOTIFICATION_TYPE_MEMORY
                 );
                 
-                Alert.alert('Success', `Memory updated with reminder set for ${reminderDate.toDateString()}`);
+                Alert.alert('Memory Updated', `Reminder set for ${reminderDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}`);
               }
             });
           },

@@ -10,7 +10,7 @@ const CreateRentTransactionScreen = ({route, navigation}) => {
     const { id:rentId, fixedDue } = route.params.rent;
     const addItem = (date, due) => {
         if(!due){
-          Alert.alert('Error', 'Please provide a valid due amount.');
+          Alert.alert('Missing Information', 'Please enter a valid due amount.');
           return;
         }
         insertData(collection, {
@@ -31,7 +31,7 @@ const CreateRentTransactionScreen = ({route, navigation}) => {
             
             // Include rent name in notification message for better context
             addReminder('Rent Due', `Its time to pay the rent for ${route.params.rent.name || 'your property'} - ${MONTHS[scheduleDate.getMonth()]}`, rentId, scheduleDate, NOTIFICATION_TYPE_RENT);
-            Alert.alert('Success', `Rent due paid for ${route.params.rent.name || 'your property'}. You will be reminded to pay next due on ${scheduleDate.toDateString()}`, [
+            Alert.alert('Payment Recorded', `Payment for ${route.params.rent.name || 'your property'} saved. Next reminder: ${scheduleDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}`, [
             {
               text: 'View',
               onPress: () => {

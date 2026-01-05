@@ -9,7 +9,7 @@ const EditRentScreen = ({route, navigation}) => {
 
     const editItem = (time, name, advance, fixedDue, remindOnDay) => {
         if(!name || !advance || !fixedDue){
-          Alert.alert('Error', 'Please provide a valid name and advance to update entry.');
+          Alert.alert('Missing Information', 'Please fill in all required fields (name, advance, and fixed due).');
           return;
         }
         updateData(collection, id, {
@@ -22,7 +22,7 @@ const EditRentScreen = ({route, navigation}) => {
           () => {
             // Rent record updated successfully - no need to schedule reminder here
             // Reminders will be created when rent transactions are created
-            Alert.alert('Success', 'Rent record updated successfully', [{text: 'View', onPress: () => navigation.navigate('ListRent')}]);
+            Alert.alert('Rent Updated', 'Your changes have been saved.', [{text: 'View', onPress: () => navigation.navigate('ListRent')}]);
           }
       );
     }

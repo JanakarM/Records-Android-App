@@ -7,7 +7,7 @@ const collection = 'Rent';
 const CreateRentScreen = ({navigation}) => {
     const addItem = (date, name, advance, fixedDue, remindOnDay) => {
       if(!name || !advance || !fixedDue){
-          Alert.alert('Error', 'Please provide a valid name and advance to create entry.');
+          Alert.alert('Missing Information', 'Please fill in all required fields (name, advance, and fixed due).');
           return;
         }
         insertData(collection, {
@@ -19,7 +19,7 @@ const CreateRentScreen = ({navigation}) => {
           }, (doc) =>  {
             // Rent record created successfully - no need to schedule reminder here
             // Reminders will be created when rent transactions are created
-            Alert.alert('Success', 'Rent record created successfully', [
+            Alert.alert('Rent Created', 'Your rent record has been saved successfully.', [
               {
                 text: 'View',
                 onPress: () => {

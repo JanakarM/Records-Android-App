@@ -8,7 +8,7 @@ import { cancelNotification, getScheduledNotifications, NOTIFICATION_TYPE_RENT }
 
 const collection = 'RentTransaction';
 
-const ListItem = ({id, time, due, deleteItem, editItem}) => {
+const ListItem = ({id, time, due, index, deleteItem, editItem}) => {
   const date = new Date(time);
   const formattedDate = date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
   
@@ -18,8 +18,8 @@ const ListItem = ({id, time, due, deleteItem, editItem}) => {
         style={styles.card}
       >
         <View style={styles.cardLeft}>
-          <View style={styles.iconContainer}>
-            <Icon name="calendar-check-o" size={18} color="#4caf50" />
+          <View style={styles.serialBadge}>
+            <Text style={styles.serialText}>#{index}</Text>
           </View>
         </View>
         <View style={styles.cardContent}>
@@ -46,13 +46,17 @@ const ListRentTransactionScreen = ({route, navigation}) => {
 
     const onSnapshot = (docs) => {
       const rentTransactions = [];
-        docs.forEach((doc, i) => {
+        docs.forEach((doc) => {
           rentTransactions.push({
             ...doc.data(),
             id: doc.id,
-            index: i+1
           });
         });
+      // Reverse index: oldest = #1, newest = highest number
+      const total = rentTransactions.length;
+      rentTransactions.forEach((item, i) => {
+        item.index = total - i;
+      });
       setRentTransactions(rentTransactions);
       fetchNextReminderDates(rentId);
     }
@@ -66,7 +70,7 @@ const ListRentTransactionScreen = ({route, navigation}) => {
     };
 
     const deleteItem = (id) => {
-      Alert.alert('Delete Rent Transaction', `Do you want delete this item?`, [
+      Alert.alert('Delete Payment', 'Are you sure you want to delete this payment record?', [
         {
           text: 'Delete',
           style: 'destructive',
@@ -223,13 +227,18 @@ const styles = RNStyleSheet.create({
   cardLeft: {
     marginRight: 12,
   },
-  iconContainer: {
+  serialBadge: {
     width: 40,
     height: 40,
     borderRadius: 10,
     backgroundColor: '#e8f5e9',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  serialText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#4caf50',
   },
   cardContent: {
     flex: 1,

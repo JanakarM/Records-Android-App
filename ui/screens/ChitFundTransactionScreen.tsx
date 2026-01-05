@@ -6,7 +6,7 @@ import {deleteData, getSnapShot, insertData, updateData} from '../data/DataBroke
 
 const collection = 'ChitFundTransactions';
 
-const ListItem = ({id, time, amount, deleteItem, editItem}) => {
+const ListItem = ({id, time, amount, index, deleteItem, editItem}) => {
   const date = new Date(parseFloat(time));
   const formattedDate = date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
   
@@ -16,8 +16,8 @@ const ListItem = ({id, time, amount, deleteItem, editItem}) => {
         style={styles.card}
       >
         <View style={styles.cardLeft}>
-          <View style={styles.iconContainer}>
-            <Icon name="money" size={18} color="#9c27b0" />
+          <View style={styles.serialBadge}>
+            <Text style={styles.serialText}>#{index}</Text>
           </View>
         </View>
         <View style={styles.cardContent}>
@@ -51,13 +51,17 @@ export default function({route}){
     const onSnapshot = async(docs) => {
       const transactions = [];
       let paid = 0;
-        docs.forEach((doc, i) => {
+        docs.forEach((doc) => {
           transactions.push({
             ...doc.data(),
             id: doc.id,
-            index: i+1
           });
           paid += parseInt(doc.data().amount);
+        });
+        // Reverse index: oldest = #1, newest = highest number
+        const total = transactions.length;
+        transactions.forEach((item, i) => {
+          item.index = total - i;
         });
         setTransactions(transactions);
         setAmountPaidTillDate(paid);
@@ -69,7 +73,7 @@ export default function({route}){
         return;
       }
       if(amount == ''){
-        Alert.alert('Error', 'Please provide a transaction amount to create entry.');
+        Alert.alert('Missing Information', 'Please enter a transaction amount.');
         return;  
       }
       insertData(collection, {
@@ -79,7 +83,7 @@ export default function({route}){
         }, () => setCanModify(false));
     }
     const deleteItem = (id) => {
-      Alert.alert('Delete Item', 'Do you want delete this item?', [
+      Alert.alert('Delete Transaction', 'Are you sure you want to delete this transaction?', [
         {
           text: 'Delete',
           style: 'destructive',
@@ -94,7 +98,7 @@ export default function({route}){
       ]);
     }
     const updateItem = () => {
-      Alert.alert('Update Item', 'Do you want update this item?', [
+      Alert.alert('Update Transaction', 'Save changes to this transaction?', [
         {
           text: 'Update',
           onPress: () => {
@@ -296,13 +300,18 @@ const styles = RNStyleSheet.create({
   cardLeft: {
     marginRight: 12,
   },
-  iconContainer: {
+  serialBadge: {
     width: 40,
     height: 40,
     borderRadius: 10,
     backgroundColor: '#f3e5f5',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  serialText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#9c27b0',
   },
   cardContent: {
     flex: 1,

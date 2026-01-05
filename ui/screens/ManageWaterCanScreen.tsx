@@ -82,7 +82,7 @@ export default function(){
         return;
       }
       if(count == ''){
-        Alert.alert('Error', 'Please provide number of cans to create entry.');
+        Alert.alert('Missing Information', 'Please enter the number of water cans.');
         return;  
       }
       insertData(collection, {
@@ -91,7 +91,7 @@ export default function(){
       }, () => setCanModify(false));
     }
     const deleteCan = (id) => {
-      Alert.alert('Delete Item', 'Do you want delete this item?', [
+      Alert.alert('Delete Entry', 'Are you sure you want to delete this entry?', [
         {
           text: 'Delete',
           onPress: () => {
@@ -106,7 +106,7 @@ export default function(){
       ]);
     }
     const deleteCansForTheMonth = (startTime, endTime, month) => {
-      Alert.alert('Delete Item', `Do you want delete the can entries for ${month}?`, [
+      Alert.alert('Delete Month', `Delete all water can entries for ${month}?`, [
         {
           text: 'Delete',
           onPress: () => {
@@ -124,7 +124,7 @@ export default function(){
       ]);
     }
     const updateItem = () => {
-      Alert.alert('Update Item', 'Do you want update this item?', [
+      Alert.alert('Update Entry', 'Save changes to this entry?', [
         {
           text: 'Update',
           onPress: () => {

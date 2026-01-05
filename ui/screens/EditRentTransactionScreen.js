@@ -13,7 +13,7 @@ const EditRentTransactionScreen = ({route, navigation}) => {
 
     const editItem = (time, due) => {
         if(!due){
-          Alert.alert('Error', 'Please provide a valid amount to update due.');
+          Alert.alert('Missing Information', 'Please enter a valid due amount.');
           return;
         }
         
@@ -34,7 +34,7 @@ const EditRentTransactionScreen = ({route, navigation}) => {
             // Include rent name in notification message for better context
             addReminder('Rent Due', `Its time to pay the rent for ${rent.name || 'your property'} - ${MONTHS[scheduleDate.getMonth()]}`, rent.id, scheduleDate, NOTIFICATION_TYPE_RENT);
             
-            Alert.alert('Success', `Rent due updated for ${rent.name || 'your property'}. You will be reminded to pay next due on ${scheduleDate.toDateString()}`, [
+            Alert.alert('Payment Updated', `Changes saved for ${rent.name || 'your property'}. Next reminder: ${scheduleDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}`, [
               {text: 'View', onPress: () => navigation.navigate('ListRentTransaction', {rent})}
             ]);
           });
